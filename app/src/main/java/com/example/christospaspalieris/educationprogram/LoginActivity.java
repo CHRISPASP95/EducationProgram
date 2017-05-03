@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth firebaseAyth;
-    private FirebaseAuth.AuthStateListener mfirehaseAyth;
+    private FirebaseAuth.AuthStateListener mfirebaseAyth;
     private DatabaseReference dbReferenceLogin;
 
     TextView textView_SignUP;
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAyth = FirebaseAuth.getInstance();
-        mfirehaseAyth = new FirebaseAuth.AuthStateListener() {
+        mfirebaseAyth = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()==null)
@@ -53,6 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password = (EditText) findViewById(R.id.TextPassword);
 
         btn=(Button)findViewById(R.id.buttonSiginIn);
+
+        progressLogin = new ProgressDialog(this);
     }
 
     @Override
@@ -65,10 +67,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if(view==textView_SignUP) {
-            firebaseAyth.addAuthStateListener(mfirehaseAyth);
+            firebaseAyth.addAuthStateListener(mfirebaseAyth);
             firebaseAyth.signOut();
         }
         if(view==btn){
+            progressLogin.setMessage("Sign in User!!!");
+            progressLogin.show();
             checkLogin();
         }
     }
@@ -78,14 +82,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String getemail = email.getText().toString().trim();
         String getpassword = password.getText().toString().trim();
 
+
+
         if(!TextUtils.isEmpty(getemail)&&!TextUtils.isEmpty(getpassword)&&!TextUtils.isEmpty(getusername)){
             firebaseAyth.signInWithEmailAndPassword(getemail,getpassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
-                        progressLogin.setMessage("Registering User...");
-                        progressLogin.show();
                         checkUserExist();
+                        progressLogin.dismiss();
                     }else{
                         Toast.makeText(LoginActivity.this,"Error while Login",Toast.LENGTH_LONG).show();
                     }
@@ -101,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id)){
                     startActivity(new Intent(LoginActivity.this,EducationalProgramActivity.class));
-                    progressLogin.dismiss();
                    // Toast.makeText(getApplicationContext(),"Hello !!!"+ user_id,Toast.LENGTH_LONG).show();
                 }else {
                     Toast.makeText(LoginActivity.this,"Error !!!",Toast.LENGTH_LONG).show();

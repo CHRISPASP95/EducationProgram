@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
-    private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, confirmedpassword;
+    private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, editTextAge;
     private TextView textViewSignin;
 
     private ProgressDialog progressdialog;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editTextLastName = (EditText)findViewById(R.id.editTextLastName);
         editTextEmail = (EditText)findViewById(R.id.editTextEmail);
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
-        confirmedpassword = (EditText)findViewById(R.id.editTextPasswordConfirmed);
+        editTextAge = (EditText)findViewById(R.id.editAge);
 
         textViewSignin=(TextView)findViewById(R.id.textViewSignin);
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String LastName = editTextLastName.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-        String password_confirmed = confirmedpassword.getText().toString().trim();
+        String age = editTextAge.getText().toString().trim();
 
         if(TextUtils.isEmpty(username)){
             Toast.makeText(this,"Please enter username", Toast.LENGTH_SHORT).show();
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this,"Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(password_confirmed)){
-            Toast.makeText(this,"Please confirm your password", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(age)){
+            Toast.makeText(this,"Please enter your age", Toast.LENGTH_SHORT).show();
             return;
         }
         progressdialog.setMessage("Registering User...");
@@ -142,8 +142,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String lastname = editTextLastName.getText().toString().trim();
         String emai_address = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
+        String age = editTextAge.getText().toString().trim();
 
-        UserInformation userInformation = new UserInformation(username,firstname,lastname,emai_address,password);
+        UserInformation userInformation = new UserInformation(username,firstname,lastname,emai_address,password,age);
         FirebaseUser user = firebaseAyth.getCurrentUser();
 
         dbReference.child(user.getUid()).setValue(userInformation);

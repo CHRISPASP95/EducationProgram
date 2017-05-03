@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="49dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
         <TextView
@@ -66,12 +66,12 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/editTextPasswordConfirmed"
+            android:id="@+id/editAge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="Confirm Password"
-            android:inputType="textPassword" />
+            android:hint="Age"
+            android:inputType="date" />
 
         <Button
             android:id="@+id/buttonRegister"
