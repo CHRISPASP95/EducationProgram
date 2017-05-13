@@ -3,6 +3,7 @@ package com.example.christospaspalieris.educationprogram;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,21 +33,28 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button buttonRegister;
+    private Button buttonRegister, btn2;
     private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, editTextAge;
+    private RadioGroup choice_sex;
     private RadioButton male,female;
     private TextView textViewSignin;
     private ImageButton imageButton;
     private Uri profile_pic;
+    private Uri camera_uri;
+
+    private boolean camera = false;
 
     private ProgressDialog progressdialog;
 
     private static final int GALLERY_REQUEST = 1;
+    private static final int CAMERA_REQUEST_CODE = 2;
 
 
     private FirebaseAuth firebaseAyth;
     private DatabaseReference dbReference;
     private StorageReference mStorageImage;
+
+    String sex = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         buttonRegister=(Button)findViewById(R.id.buttonRegister);
+        btn2= (Button)findViewById(R.id.button2);
 
         editTextUserName = (EditText)findViewById(R.id.editTextUserName);
         editTextFirstName = (EditText)findViewById(R.id.editTextFirstName);
@@ -61,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
         editTextAge = (EditText)findViewById(R.id.editAge);
 
+        choice_sex = (RadioGroup) findViewById(R.id.radiogroup);
         male = (RadioButton) findViewById(R.id.radiomale);
         female = (RadioButton) findViewById(R.id.radiofemale);
 
@@ -72,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonRegister.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
-        imageButton.setOnClickListener(this);
 
         firebaseAyth = FirebaseAuth.getInstance();
         dbReference = FirebaseDatabase.getInstance().getReference("USERS");
@@ -90,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if(view==imageButton){
+            camera=false;
             Intent galleryIntent = new Intent();
             galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
             galleryIntent.setType("image/*");
@@ -99,6 +110,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             /*FirebaseUser user = firebaseAyth.getCurrentUser();
             if(user!=null)*/
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+        }
+        if(view==btn2){
+            camera=true;
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        }
+
+        int checkRadioButton = choice_sex.getCheckedRadioButtonId();
+
+        switch (checkRadioButton){
+            case R.id.radiomale:
+                if(male.isChecked()){
+                    sex = "Male";
+                }
+                break;
+            case R.id.radiofemale:
+                if(female.isChecked()){
+                    sex = "Female";
+                }
+                break;
         }
 
     }
@@ -124,7 +155,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Exception error = result.getError();
             }
         }
+        if(requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK){
+            profile_pic = data.getData();
+            imageButton.setImageURI(profile_pic);
+        }
     }
+
+
 
     private void registerUser() {
 
@@ -195,30 +232,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String email_address = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String age = editTextAge.getText().toString().trim();
-        String sex = "";
 
 
 
-        if(male.isChecked())
-            sex = "Male";
-        if(female.isChecked())
-            sex = "Female";
+
+
 
         UserInformation userInformation = new UserInformation(username,firstname,lastname,email_address,password,age,sex);
         FirebaseUser user = firebaseAyth.getCurrentUser();
 
         dbReference.child(user.getUid()).child("Person's Info").setValue(userInformation);
-
         StorageReference filepath = mStorageImage.child(profile_pic.getLastPathSegment());
         filepath.putFile(profile_pic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                 FirebaseUser user = firebaseAyth.getCurrentUser();
                 @SuppressWarnings("VisibleForTests")
                 String downloadUri = taskSnapshot.getDownloadUrl().toString();
                 dbReference.child(user.getUid()).child("Person's Info").child("Profile_images").setValue(downloadUri);
+
             }
         });
+               /* StorageReference filepath = mStorageImage.child("camera").child(camera_uri.getLastPathSegment());
+                filepath.putFile(camera_uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        FirebaseUser user = firebaseAyth.getCurrentUser();
+                        @SuppressWarnings("VisibleForTests")
+                        String downloadUri = taskSnapshot.getDownloadUrl().toString();
+                        dbReference.child(user.getUid()).child("Person's Info").child("Profile_images").setValue(downloadUri);
+                    }
+                });*/
+
     }
 }

@@ -31,7 +31,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView textView_SignUP;
     EditText username,email,password;
     Button btn;
+
     private ProgressDialog progressLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -32,10 +32,18 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClick"
+                    android:text="Button" />
+
                 <ImageButton
                     android:id="@+id/imageButton"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:onClick="onClick"
                     android:scaleType="centerCrop"
                     app:srcCompat="@mipmap/default_image" />
 
@@ -89,45 +97,50 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radiomale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Male" />
+                    <RadioGroup
+                        android:id="@+id/radiogroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radiofemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/radiomale"
-                        android:layout_weight="0.12"
-                        android:text="Female" />
+                        <RadioButton
+                            android:id="@+id/radiofemale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/radiomale"
+                            android:layout_weight="1"
+                            android:text="Female" />
+
+                        <RadioButton
+                            android:id="@+id/radiomale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Male" />
+                    </RadioGroup>
 
                     <Button
                         android:id="@+id/buttonRegister"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:onClick="onClick"
                         android:text="Register User" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textViewSignin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:onClick="onClick"
                         android:text="Already Registered? Sign in here" />
+
                 </LinearLayout>
 
 

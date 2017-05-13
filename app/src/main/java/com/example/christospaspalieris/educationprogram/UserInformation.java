@@ -27,4 +27,8 @@ public class UserInformation {
         this.age = age;
         this.sex = sex;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
