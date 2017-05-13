@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EducationProgram</string>
+    <string name="browse">Browse</string>
+    <string name="take_picture">Take a picture</string>
 </resources>

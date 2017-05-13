@@ -63,4 +63,9 @@ public class EducationalProgramActivity extends ActionBarActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void onBackPressed() {
+    }
 }

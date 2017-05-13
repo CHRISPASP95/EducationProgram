@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.christospaspalieris.educationprogram.EducationalProgramActivity">
 
-    <include layout="@layout/app_bar">
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="88dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/portion"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="70dp" />
 
-    </include>
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="123dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/shapes"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="284dp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/fysikoi"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="177dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="29dp"
+        android:layout_weight="1"
+        android:text="Γεωμετρία"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="329dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="100dp"
+        android:layout_height="33dp"
+        android:layout_weight="1"
+        android:text="Φυσικοί αριθμοί"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="219dp"
+        tools:layout_editor_absoluteY="194dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="99dp"
+        android:layout_height="29dp"
+        android:layout_weight="1"
+        android:text="Κλάσματα"
+        android:textAlignment="center"
+        tools:layout_editor_absoluteX="219dp"
+        tools:layout_editor_absoluteY="99dp" />
 
 
 </android.support.constraint.ConstraintLayout>
