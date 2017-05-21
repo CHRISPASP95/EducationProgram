@@ -24,13 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth firebaseAyth;
-    private FirebaseAuth.AuthStateListener mfirebaseAyth;
-    private DatabaseReference dbReferenceLogin;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference dbReference;
 
-    TextView textView_SignUP;
-    EditText username,email,password;
-    Button btn;
+    TextView SignUptv;
+    EditText email,password;
+    Button LoginBtn;
+    Button goToBtn;
 
     private ProgressDialog progressLogin;
 
@@ -38,56 +39,78 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        firebaseAyth = FirebaseAuth.getInstance();
-        mfirebaseAyth = new FirebaseAuth.AuthStateListener() {
+        mAuth = FirebaseAuth.getInstance();
+        /*mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser()==null)
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                if(firebaseAuth.getCurrentUser()==null) {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+
             }
-        };
-        dbReferenceLogin= FirebaseDatabase.getInstance().getReference("USERS");
+        };*/
 
-        textView_SignUP=(TextView)findViewById(R.id.textView_SignUp);
+        goToBtn = (Button)findViewById(R.id.gotobtn);
+        dbReference = FirebaseDatabase.getInstance().getReference("USERS");
+        SignUptv=(TextView)findViewById(R.id.SIgnUp);
 
-        username = (EditText) findViewById(R.id.UserName);
         email = (EditText) findViewById(R.id.EmailAddress);
         password = (EditText) findViewById(R.id.TextPassword);
 
-        btn=(Button)findViewById(R.id.buttonSiginIn);
+        LoginBtn=(Button)findViewById(R.id.buttonSiginIn);
 
         progressLogin = new ProgressDialog(this);
+
+        LoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressLogin.setMessage("Signing In");
+                progressLogin.show();
+                checkLogin();
+            }
+        });
+
+        goToBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), EducationalActivity.class));
+            }
+        });
+
+        SignUptv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registerIntent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(registerIntent);
+            }
+        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
 
     @Override
     public void onClick(View view) {
-        if(view==textView_SignUP) {
-            firebaseAyth.addAuthStateListener(mfirebaseAyth);
-            firebaseAyth.signOut();
-        }
-        if(view==btn){
-            progressLogin.setMessage("Sign in User!!!");
-            progressLogin.show();
-            checkLogin();
+        /*if(view==textView_SignUP) {
+            mAuth.addAuthStateListener(mAuthListener);
+            mAuth.signOut();
+        }*/
+        if(view==LoginBtn){
+
         }
     }
 
     private void checkLogin() {
-        String getusername = username.getText().toString().trim();
         String getemail = email.getText().toString().trim();
         String getpassword = password.getText().toString().trim();
 
 
 
-        if(!TextUtils.isEmpty(getemail)&&!TextUtils.isEmpty(getpassword)&&!TextUtils.isEmpty(getusername)){
-            firebaseAyth.signInWithEmailAndPassword(getemail,getpassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        if(!TextUtils.isEmpty(getemail)&&!TextUtils.isEmpty(getpassword)){
+            mAuth.signInWithEmailAndPassword(getemail,getpassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
@@ -102,15 +125,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void checkUserExist() {
-        final String user_id = firebaseAyth.getCurrentUser().getUid();
-        dbReferenceLogin.addValueEventListener(new ValueEventListener() {
+        final String user_id = mAuth.getCurrentUser().getUid();
+        dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id)){
-                    startActivity(new Intent(LoginActivity.this,EducationalProgramActivity.class));
+                    Intent educationIntent = new Intent(LoginActivity.this,EducationalProgramActivity.class);
+                    educationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(educationIntent);
                    // Toast.makeText(getApplicationContext(),"Hello !!!"+ user_id,Toast.LENGTH_LONG).show();
                 }else {
-                    Toast.makeText(LoginActivity.this,"Error !!!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this,"You have to setup your account",Toast.LENGTH_LONG).show();
                 }
             }
 

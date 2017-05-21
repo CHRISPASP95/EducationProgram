@@ -5,8 +5,8 @@
     <item android:title="Item" />
     <item android:title="Item" />
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/action_logout"
         android:actionViewClass="android.widget.SearchView"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="Search" />
+        android:icon="@drawable/calculator"
+        android:title="Log Out" />
 </menu>

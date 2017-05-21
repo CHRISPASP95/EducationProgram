@@ -1,17 +1,24 @@
 package com.example.christospaspalieris.educationprogram;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,21 +36,26 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button buttonRegister;
     private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, editTextAge;
     private RadioButton male,female;
+    private RadioGroup choice_sex;
+    private String sex;
     private TextView textViewSignin;
     private ImageButton imageButton;
     private Uri profile_pic;
 
-    private ProgressDialog progressdialog;
+    private ProgressDialog mProgress;
 
     private static final int GALLERY_REQUEST = 1;
+    private static final int CAMERA_REQUEST_CODE = 2;
 
-
-    private FirebaseAuth firebaseAyth;
+    private FirebaseAuth mAuth;
     private DatabaseReference dbReference;
     private StorageReference mStorageImage;
 
@@ -51,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         buttonRegister=(Button)findViewById(R.id.buttonRegister);
 
@@ -63,20 +76,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         male = (RadioButton) findViewById(R.id.radiomale);
         female = (RadioButton) findViewById(R.id.radiofemale);
+        choice_sex = (RadioGroup) findViewById(R.id.radiogroup);
 
         imageButton = (ImageButton) findViewById(R.id.imageButton);
 
         textViewSignin=(TextView)findViewById(R.id.textViewSignin);
 
-        progressdialog = new ProgressDialog(this);
+        mProgress = new ProgressDialog(this);
 
         buttonRegister.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
         imageButton.setOnClickListener(this);
 
-        firebaseAyth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+
         dbReference = FirebaseDatabase.getInstance().getReference("USERS");
         mStorageImage = FirebaseStorage.getInstance().getReference("Profile_images");
+
+        buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerUser();
+            }
+        });
 
 
     }
@@ -90,16 +113,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if(view==imageButton){
-            Intent galleryIntent = new Intent();
-            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-            galleryIntent.setType("image/*");
-            startActivityForResult(galleryIntent,GALLERY_REQUEST);
+
+
+            PopupMenu popup = new PopupMenu(MainActivity.this, imageButton);
+            //Inflating the Popup using xml file
+            popup.getMenuInflater()
+                    .inflate(R.menu.menu_list, popup.getMenu());
+
+            //registering popup with OnMenuItemClickListener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    if(item.getTitle().equals("Browse"))
+                    {
+                        Intent galleryIntent = new Intent();
+                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                        galleryIntent.setType("image/*");
+                        startActivityForResult(galleryIntent,GALLERY_REQUEST);
+                    }
+                    else if(item.getTitle().equals("Take a picture"))
+                    {
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+                        }
+                    }
+                    Toast.makeText(
+                            MainActivity.this,
+                            "You Clicked : " + item.getTitle(),
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return true;
+                }
+            });
+
+            popup.show(); //showing popup menu
         }
+
         if(view==textViewSignin){
             /*FirebaseUser user = firebaseAyth.getCurrentUser();
             if(user!=null)*/
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
         }
+        int checkRadioButton = choice_sex.getCheckedRadioButtonId();
+
+        switch (checkRadioButton){
+            case R.id.radiomale:
+                if(male.isChecked()){
+                    sex = "Male";
+                }
+                break;
+            case R.id.radiofemale:
+                if(female.isChecked()){
+                    sex = "Female";
+                }
+                break;
+        }
+
 
     }
 
@@ -107,13 +176,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==GALLERY_REQUEST && resultCode==RESULT_OK){
+        if(resultCode != RESULT_CANCELED) {
+            if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 
-            Uri imageUri = data.getData();
-            CropImage.activity(imageUri)
-                    .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .start(this);
+                Uri imageUri = data.getData();
+                CropImage.activity(imageUri)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAspectRatio(1, 1)
+                        .start(this);
+            } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+
+
+
+
+                //imageButton.setImageURI(null);
+                //imageButton.setImageURI(profile_pic);
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                imageButton.setImageBitmap(photo);
+
+                //profile_pic = getImageUri(getApplicationContext(), photo);
+
+
+                if(profile_pic == null)
+                {
+                    System.out.println("yolo");
+                }
+
+
+            }
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -126,6 +216,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap photo) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), photo, "Title", null);
+        return Uri.parse(path);
+    }
     private void registerUser() {
 
         String username = editTextUserName.getText().toString().trim();
@@ -161,24 +257,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        progressdialog.setMessage("Registering User...");
-        progressdialog.show();
+        mProgress.setMessage("Registering User and\nSigning In");
+        mProgress.show();
 
-        firebaseAyth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this,"Registerd success", Toast.LENGTH_SHORT).show();
-                    progressdialog.dismiss();
+
+                    String user_id = mAuth.getCurrentUser().getUid();
+                    DatabaseReference current_user_db = dbReference.child(user_id);
+                    SaveUserInfo();
+
+                    mProgress.dismiss();
+
+                    Intent educationIntent = new Intent(MainActivity.this, EducationalProgramActivity.class);
+                    educationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(educationIntent);
+
+                   /* Toast.makeText(MainActivity.this,"Registerd success", Toast.LENGTH_SHORT).show();
+                    mProgress.dismiss();
                     SaveUserInfo();
                     Intent Login = new Intent(getApplicationContext(),LoginActivity.class);
                     Login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(Login);
+                    startActivity(Login);*/
 
                 }
                 else {
                     Toast.makeText(MainActivity.this,"error", Toast.LENGTH_SHORT).show();
-                    progressdialog.dismiss();
+                    mProgress.dismiss();
                 }
 
             }
@@ -195,7 +302,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String email_address = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String age = editTextAge.getText().toString().trim();
-        String sex = "";
 
 
 
@@ -205,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sex = "Female";
 
         UserInformation userInformation = new UserInformation(username,firstname,lastname,email_address,password,age,sex);
-        FirebaseUser user = firebaseAyth.getCurrentUser();
+        FirebaseUser user = mAuth.getCurrentUser();
 
         dbReference.child(user.getUid()).child("Person's Info").setValue(userInformation);
 
@@ -214,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                FirebaseUser user = firebaseAyth.getCurrentUser();
+                FirebaseUser user = mAuth.getCurrentUser();
                 @SuppressWarnings("VisibleForTests")
                 String downloadUri = taskSnapshot.getDownloadUrl().toString();
                 dbReference.child(user.getUid()).child("Person's Info").child("Profile_images").setValue(downloadUri);
