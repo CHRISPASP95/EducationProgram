@@ -4,9 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/actionBarSize"
-    android:background="@color/colorPrimary">
+    android:background="@color/accent_material_light">
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/action_bar_title"
+        android:text="Math Education"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
 
 
 </android.support.v7.widget.Toolbar>

@@ -5,21 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,16 +38,22 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
+/**
+ * Created by User on 2/28/2017.
+ */
+
+public class RegisterFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "RegisterFragment";
 
     private Button buttonRegister;
     private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, editTextAge;
     private RadioButton male,female;
     private RadioGroup choice_sex;
     private String sex;
-    private TextView textViewSignin;
     private ImageButton imageButton;
     private Uri profile_pic;
 
@@ -59,33 +66,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference dbReference;
     private StorageReference mStorageImage;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.register_fragment,container,false);
 
+        buttonRegister=(Button)view.findViewById(R.id.buttonRegister);
 
-        buttonRegister=(Button)findViewById(R.id.buttonRegister);
+        editTextUserName = (EditText)view.findViewById(R.id.editTextUserName);
+        editTextFirstName = (EditText)view.findViewById(R.id.editTextFirstName);
+        editTextLastName = (EditText)view.findViewById(R.id.editTextLastName);
+        editTextEmail = (EditText)view.findViewById(R.id.editTextEmail);
+        editTextPassword = (EditText)view.findViewById(R.id.editTextPassword);
+        editTextAge = (EditText)view.findViewById(R.id.editAge);
 
-        editTextUserName = (EditText)findViewById(R.id.editTextUserName);
-        editTextFirstName = (EditText)findViewById(R.id.editTextFirstName);
-        editTextLastName = (EditText)findViewById(R.id.editTextLastName);
-        editTextEmail = (EditText)findViewById(R.id.editTextEmail);
-        editTextPassword = (EditText)findViewById(R.id.editTextPassword);
-        editTextAge = (EditText)findViewById(R.id.editAge);
+        male = (RadioButton)view. findViewById(R.id.radiomale);
+        female = (RadioButton) view.findViewById(R.id.radiofemale);
+        choice_sex = (RadioGroup) view.findViewById(R.id.radiogroup);
 
-        male = (RadioButton) findViewById(R.id.radiomale);
-        female = (RadioButton) findViewById(R.id.radiofemale);
-        choice_sex = (RadioGroup) findViewById(R.id.radiogroup);
+        imageButton = (ImageButton) view.findViewById(R.id.imageButton);
 
-        imageButton = (ImageButton) findViewById(R.id.imageButton);
-
-        textViewSignin=(TextView)findViewById(R.id.textViewSignin);
-
-        mProgress = new ProgressDialog(this);
+        mProgress = new ProgressDialog(getActivity());
 
         buttonRegister.setOnClickListener(this);
-        textViewSignin.setOnClickListener(this);
         imageButton.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -100,11 +103,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 registerUser();
             }
         });
-
-
+        return view;
     }
-
-
 
     @Override
     public void onClick(View view) {
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(view==imageButton){
 
 
-            PopupMenu popup = new PopupMenu(MainActivity.this, imageButton);
+            PopupMenu popup = new PopupMenu(getActivity(), imageButton);
             //Inflating the Popup using xml file
             popup.getMenuInflater()
                     .inflate(R.menu.menu_list, popup.getMenu());
@@ -133,12 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     else if(item.getTitle().equals("Take a picture"))
                     {
                         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                             startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
                         }
                     }
                     Toast.makeText(
-                            MainActivity.this,
+                            getActivity(),
                             "You Clicked : " + item.getTitle(),
                             Toast.LENGTH_SHORT
                     ).show();
@@ -149,11 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             popup.show(); //showing popup menu
         }
 
-        if(view==textViewSignin){
-            /*FirebaseUser user = firebaseAyth.getCurrentUser();
-            if(user!=null)*/
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
-        }
+
         int checkRadioButton = choice_sex.getCheckedRadioButtonId();
 
         switch (checkRadioButton){
@@ -173,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode != RESULT_CANCELED) {
@@ -183,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 CropImage.activity(imageUri)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setAspectRatio(1, 1)
-                        .start(this);
+                        .start(getActivity());
             } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
 
 
@@ -232,28 +228,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String age = editTextAge.getText().toString().trim();
 
         if(TextUtils.isEmpty(username)){
-            Toast.makeText(this,"Please enter username", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter username", Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(FirstName)){
-            Toast.makeText(this,"Please enter first name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter first name", Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(LastName)){
-            Toast.makeText(this,"Please enter last name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter last name", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Please enter email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter email", Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(password)){
-            Toast.makeText(this,"Please enter password", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
         if(TextUtils.isEmpty(age)){
-            Toast.makeText(this,"Please enter your age", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Please enter your age", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -271,11 +267,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     mProgress.dismiss();
 
-                    Intent educationIntent = new Intent(MainActivity.this, EducationalProgramActivity.class);
+                    Intent educationIntent = new Intent(getActivity(), EducationalProgramActivity.class);
                     educationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(educationIntent);
 
-                   /* Toast.makeText(MainActivity.this,"Registerd success", Toast.LENGTH_SHORT).show();
+                   /* Toast.makeText(RegisterActivity.this,"Registerd success", Toast.LENGTH_SHORT).show();
                     mProgress.dismiss();
                     SaveUserInfo();
                     Intent Login = new Intent(getApplicationContext(),LoginActivity.class);
@@ -284,7 +280,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
                 else {
-                    Toast.makeText(MainActivity.this,"error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity()
+                            ,"error", Toast.LENGTH_SHORT).show();
                     mProgress.dismiss();
                 }
 

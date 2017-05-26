@@ -7,7 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.christospaspalieris.educationprogram.MainActivity">
+        tools:context="com.example.christospaspalieris.educationprogram.RegisterActivity">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -32,30 +32,16 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center">
 
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="0.29"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@mipmap/default_image" />
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/cam"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end|bottom"
-                        android:layout_margin="@dimen/cam_margin"
-                        app:backgroundTint="@android:color/holo_blue_dark"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
-                </LinearLayout>
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.29"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@mipmap/default_image" />
 
                 <EditText
                     android:id="@+id/editTextUserName"
@@ -138,6 +124,7 @@
 
                     <Button
                         android:id="@+id/buttonRegister"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
@@ -148,7 +135,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="invisible">
 
                     <TextView
                         android:id="@+id/textViewSignin"

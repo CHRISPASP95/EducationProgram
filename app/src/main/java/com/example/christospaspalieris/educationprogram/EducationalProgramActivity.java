@@ -3,7 +3,9 @@ package com.example.christospaspalieris.educationprogram;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,44 +35,10 @@ public class EducationalProgramActivity extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference dbReference;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
-    GridView grid;
-    String[] web = {
-            "Google",
-            "Github",
-            "Instagram",
-            "Facebook",
-            "Flickr",
-            "Pinterest",
-            "Quora",
-            "Twitter",
-            "Vimeo",
-            "WordPress",
-            "Youtube",
-            "Stumbleupon",
-            "SoundCloud",
-            "Reddit",
-            "Blogger"
 
-    } ;
-    int[] imageId = {
-            R.drawable.sample_0,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7,
-            R.drawable.sample_1,
-            R.drawable.sample_2,
-            R.drawable.sample_3,
-            R.drawable.sample_4,
-            R.drawable.sample_5,
-            R.drawable.sample_6,
-            R.drawable.sample_7
-
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,29 +50,19 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         ListView listview = (ListView) findViewById(R.id.listview);
         listview.setAdapter(adapter);
 
-       /* CustomGrid adapter = new CustomGrid(EducationalProgramActivity.this, web, imageId);
-        grid=(GridView)findViewById(R.id.grid);
-        grid.setAdapter(adapter);
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(EducationalProgramActivity.this, "You Clicked at " +web[+ position], Toast.LENGTH_SHORT).show();
+        toolbar = (Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        //getSupportActionBar().setIcon(R.drawable.ruler_pencil);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-            }
-        });
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
-        GridView gridview = (GridView) findViewById(R.id.grid);
-        gridview.setAdapter(new ImageAdapter(this));
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(EducationalProgramActivity.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });*/
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         //toolbar =(Toolbar) findViewById(R.id.my_toolbar);
@@ -116,9 +74,9 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() == null)
                 {
-                    Intent loginIntent = new Intent(EducationalProgramActivity.this,LoginActivity.class);
-                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(loginIntent);
+                    Intent logregIntentt = new Intent(getApplicationContext(),LoginRegisterActivity.class);
+                    logregIntentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(logregIntentt);
                 }
             }
         };
@@ -130,7 +88,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren())
                 {
                     UserInformation userInformation = snapshot.getValue(UserInformation.class);
-                    setTitle("Welcome " + userInformation.getUsername());
+                    //setTitle("Welcome " + userInformation.getUsername());
 
                     //getSupportActionBar().setTitle(userInformation.getUsername() +" <3");
 
@@ -169,6 +127,15 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         {
             logout();
         }
+        else if(item.getItemId() == R.id.profile)
+        {
+            Intent profileintent = new Intent(EducationalProgramActivity.this,ProfileActivity.class);
+            startActivity(profileintent);
+        }
+        else if(mToggle.onOptionsItemSelected(item))
+        {
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -185,55 +152,3 @@ public class EducationalProgramActivity extends AppCompatActivity  {
 
 
 
-class ImageAdapter extends BaseAdapter {
-    private Context mContext;
-
-    public ImageAdapter(Context c) {
-        mContext = c;
-    }
-
-    public int getCount() {
-        return mThumbIds.length;
-    }
-
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(150, 150));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
-        }
-
-        imageView.setImageResource(mThumbIds[position]);
-
-        return imageView;
-    }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.empty, R.drawable.sample_3,
-            R.drawable.empty, R.drawable.empty,
-            R.drawable.empty, R.drawable.empty,
-            R.drawable.sample_0, R.drawable.empty,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
-    };
-}
