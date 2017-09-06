@@ -31,20 +31,19 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
+            <ImageButton
+                android:id="@+id/imageSelect"
+                android:layout_width="141dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/profile_icon" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_gravity="center">
-
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.29"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@mipmap/default_image" />
 
             </LinearLayout>
 
@@ -73,15 +72,15 @@
                 android:inputType="date" />
 
             <ToggleButton
-                android:id="@+id/resetpassButton"
+                android:id="@+id/changepassButton"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:checked="false"
                 android:text="Reset Password"
                 android:textAllCaps="false"
-                android:textOff="Reset Password"
-                android:textOn="Reset Password" />
+                android:textOff="Change Password"
+                android:textOn="Cancel Change" />
 
             <EditText
                 android:id="@+id/EToldPass"
@@ -102,12 +101,12 @@
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/buttonRegister"
+                android:id="@+id/saveProfile"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="5dp"
-                android:text="Done"
+                android:text="Save"
                 android:textAllCaps="false"
                 android:textStyle="italic" />
 

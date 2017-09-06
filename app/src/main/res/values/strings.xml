@@ -6,6 +6,11 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_educational">EducationalActivity</string>
+    <string name="title_activity_loginregister">LoginRegisterActivity</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="nothing">Nothing</string>
+    <string name="study">Study</string>
+    <string name="homework">Homework</string>
+    <string name="score">Score</string>
 </resources>

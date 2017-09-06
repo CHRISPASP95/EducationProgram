@@ -38,6 +38,7 @@ public class LoginFragment extends Fragment  {
     EditText email,password;
     Button LoginBtn;
     Button goToBtn;
+    Button buttont;
 
     private ProgressDialog progressLogin;
 
@@ -48,7 +49,7 @@ public class LoginFragment extends Fragment  {
 
         mAuth = FirebaseAuth.getInstance();
 
-
+        buttont = (Button)view.findViewById(R.id.gototheory);
         goToBtn = (Button)view.findViewById(R.id.gotobtn);
         dbReference = FirebaseDatabase.getInstance().getReference("USERS");
 
@@ -72,6 +73,13 @@ public class LoginFragment extends Fragment  {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), LoginRegisterActivity.class));
+            }
+        });
+
+        buttont.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), EducationActivity.class));
             }
         });
 

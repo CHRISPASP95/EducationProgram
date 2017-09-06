@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/action_bar_title"
-        android:text="Math Education"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
