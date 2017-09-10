@@ -7,18 +7,18 @@
 
     <item android:id="@+id/nav_account"
         android:icon="@mipmap/ic_person_white_24dp"
-        android:title="Account"/>
+        android:title="Profile"/>
 
     <item android:id="@+id/nav_forum"
         android:icon="@mipmap/ic_forum_white_24dp"
         android:title="Forum"/>
 
-    <item android:id="@+id/nav_settings"
+    <item android:id="@+id/nav_community"
         android:icon="@mipmap/ic_settings_white_24dp"
-        android:title="Settings"/>
+        android:title="Community"/>
 
     <item android:id="@+id/nav_search"
         android:icon="@mipmap/ic_search_white_24dp"
-        android:title="Search"/>
+        android:title="Logout"/>
 
 </menu>

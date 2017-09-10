@@ -17,10 +17,10 @@
     </integer-array>
 
     <string-array name="subjects">
-        <item>Δεκαδικοί</item>
-        <item>Ρίζες</item>
-        <item>Εξισώσεις</item>
-        <item>Φυσικοί</item>
+        <item>Decimals</item>
+        <item>Roots</item>
+        <item>Equations</item>
+        <item>Naturals</item>
     </string-array>
 
 

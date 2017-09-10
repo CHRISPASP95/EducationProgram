@@ -52,13 +52,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private RadioButton male,female;
     private RadioGroup choice_sex;
     private String sex;
-    private ImageButton imageButton;
     private Uri profile_pic;
 
     private ProgressDialog mProgress;
 
-    private static final int GALLERY_REQUEST = 1;
-    private static final int CAMERA_REQUEST_CODE = 2;
 
     private FirebaseAuth mAuth;
     private DatabaseReference dbReference;
@@ -82,17 +79,15 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         female = (RadioButton) view.findViewById(R.id.radiofemale);
         choice_sex = (RadioGroup) view.findViewById(R.id.radiogroup);
 
-        imageButton = (ImageButton) view.findViewById(R.id.imageSelect);
 
         mProgress = new ProgressDialog(getActivity());
 
         buttonRegister.setOnClickListener(this);
-        imageButton.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
 
 
-        dbReference = FirebaseDatabase.getInstance().getReference("USERS");
+        dbReference = FirebaseDatabase.getInstance().getReference().child("USERS");
         mStorageImage = FirebaseStorage.getInstance().getReference("Profile_images");
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -109,42 +104,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         if(view==buttonRegister){
             registerUser();
 
-        }
-        if(view==imageButton){
-
-
-            PopupMenu popup = new PopupMenu(getActivity(), imageButton);
-            //Inflating the Popup using xml file
-            popup.getMenuInflater()
-                    .inflate(R.menu.menu_list, popup.getMenu());
-
-            //registering popup with OnMenuItemClickListener
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    if(item.getTitle().equals("Browse"))
-                    {
-                        Intent galleryIntent = new Intent();
-                        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                        galleryIntent.setType("image/*");
-                        startActivityForResult(galleryIntent,GALLERY_REQUEST);
-                    }
-                    else if(item.getTitle().equals("Take a picture"))
-                    {
-                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
-                        }
-                    }
-                    Toast.makeText(
-                            getActivity(),
-                            "You Clicked : " + item.getTitle(),
-                            Toast.LENGTH_SHORT
-                    ).show();
-                    return true;
-                }
-            });
-
-            popup.show(); //showing popup menu
         }
 
 
@@ -166,49 +125,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode != RESULT_CANCELED) {
-            if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-
-                Uri imageUri = data.getData();
-                CropImage.activity(imageUri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setAspectRatio(1, 1)
-                        .start(getActivity());
-            } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-
-
-
-
-                //imageButton.setImageURI(null);
-                //imageButton.setImageURI(profile_pic);
-                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                imageButton.setImageBitmap(photo);
-
-                //profile_pic = getImageUri(getApplicationContext(), photo);
-
-
-                if(profile_pic == null)
-                {
-                    System.out.println("yolo");
-                }
-
-
-            }
-        }
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                profile_pic = result.getUri();
-                imageButton.setImageURI(profile_pic);
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
-            }
-        }
-    }
 
     public Uri getImageUri(Context inContext, Bitmap photo) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -279,7 +195,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                 }
                 else {
                     Toast.makeText(getActivity()
-                            ,"error", Toast.LENGTH_SHORT).show();
+                            ,"Error while login", Toast.LENGTH_SHORT).show();
                     mProgress.dismiss();
                 }
 
@@ -308,18 +224,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         UserInformation userInformation = new UserInformation(username,firstname,lastname,email_address,password,age,sex,default_image);
         FirebaseUser user = mAuth.getCurrentUser();
 
-        dbReference.child(user.getUid()).child("Person's Info").setValue(userInformation);
+        dbReference.child(user.getUid()).setValue(userInformation);
 
-        /*StorageReference filepath = mStorageImage.child(profile_pic.getLastPathSegment());
-        filepath.putFile(profile_pic).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                FirebaseUser user = mAuth.getCurrentUser();
-                @SuppressWarnings("VisibleForTests")
-                String downloadUri = taskSnapshot.getDownloadUrl().toString();
-                dbReference.child(user.getUid()).child("Person's Info").child("Profile_images").setValue(downloadUri);
-            }
-        });*/
     }
 }

@@ -108,6 +108,10 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
 
+                Intent theoryIntent = new Intent(getApplicationContext(),TheoryActivity.class);
+                theoryIntent.putExtra("Subject",item.getTitle());
+                startActivity(theoryIntent);
+
             }
 
             @Override
@@ -117,9 +121,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
 
                 //if(item.isSelected())
                 //{
-                if(item.getTitle() == "Δεκαδικοί Θεωρία")
-                    Toast.makeText(getApplicationContext(), "Mpika sto if ", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),TheoryActivity.class));
+
                     //openOptionsMenu();
 
                 //}
@@ -187,7 +189,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         listview.setAdapter(adapter);
         */
 
-        myLayout = (RelativeLayout)findViewById(R.id.top_parent);
+        //myLayout = (RelativeLayout)findViewById(R.id.top_parent);
 
         //Toolbar
 
@@ -199,14 +201,24 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         //---
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
+        {
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                picker.setVisibility(View.VISIBLE);
+            }
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                picker.setVisibility(View.INVISIBLE);
+            }
+        };
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigationVIew);
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.navigationView);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem){
@@ -238,28 +250,31 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             }
         };
 
-        dbReference = FirebaseDatabase.getInstance().getReference("USERS").child(mAuth.getCurrentUser().getUid());
-        dbReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
-                    UserInformation userInformation = snapshot.getValue(UserInformation.class);
-                    //setTitle("Welcome " + userInformation.getUsername());
+//        dbReference = FirebaseDatabase.getInstance().getReference("USERS").child(mAuth.getCurrentUser().getUid());
+//        dbReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snapshot : dataSnapshot.getChildren())
+//                {
+//                    UserInformation userInformation = snapshot.getValue(UserInformation.class);
+//                    //setTitle("Welcome " + userInformation.getUsername());
+//
+//                    //getSupportActionBar().setTitle(userInformation.getUsername() +" <3");
+//
+//                }
+//
+//
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
-                    //getSupportActionBar().setTitle(userInformation.getUsername() +" <3");
-
-                }
-
-
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        Intent communityIntent = new Intent(getApplicationContext(),CommunityActivity.class);
+        startActivity(communityIntent);
 
     }
 
@@ -288,6 +303,11 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         {
             Intent wallIntent = new Intent(getApplicationContext(),WallActivity.class);
             startActivity(wallIntent);
+        }
+        else if(item.getItemId() == R.id.nav_community)
+        {
+            Intent communityIntent = new Intent(getApplicationContext(),CommunityActivity.class);
+            startActivity(communityIntent);
         }
         else if(item.getItemId() == R.id.profile)
         {
