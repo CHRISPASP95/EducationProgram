@@ -85,19 +85,13 @@ public class ProfileActivity extends AppCompatActivity  {
         dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot : dataSnapshot.getChildren())
-                {
-                    userInformation = snapshot.getValue(UserInformation.class);
-                    firstname.setText(userInformation.getFirstName());
-                    lastname.setText(userInformation.getLastName());
-                    age.setText(userInformation.getAge());
+
+                userInformation = dataSnapshot.getValue(UserInformation.class);
+                firstname.setText(userInformation.getFirstName());
+                lastname.setText(userInformation.getLastName());
+                age.setText(userInformation.getAge());
 
 
-                    //setTitle("Welcome " + userInformation.getUsername());
-
-                    //getSupportActionBar().setTitle(userInformation.getUsername() +" <3");
-
-                }
 
 
             }

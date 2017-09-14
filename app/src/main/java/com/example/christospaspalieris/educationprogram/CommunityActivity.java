@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -45,9 +46,17 @@ public class CommunityActivity extends AppCompatActivity {
         ) {
             @Override
             protected void populateViewHolder(FriendsViewHolder viewHolder, Friends model, int position) {
+                final String friend_key = getRef(position).getKey();
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setOccupation(model.getRole());
                 viewHolder.setImageUri(model.getImage(),getApplicationContext());
+                viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), friend_key,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         };
 
@@ -61,10 +70,13 @@ public class CommunityActivity extends AppCompatActivity {
     {
         View mView;
 
+        ImageView userImage;
+
         public FriendsViewHolder(View itemView)
         {
             super(itemView);
             mView = itemView;
+            userImage = (ImageView)mView.findViewById(R.id.profile_friend);
         }
 
         public void setImageUri(String imageUri, Context cxt)

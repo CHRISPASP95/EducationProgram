@@ -14,12 +14,13 @@ public class UserInformation {
     public String age;
     public String sex;
     public String image;
+    public String role;
 
     public UserInformation(){
 
     }
 
-    public UserInformation(String username, String first_name, String last_name, String email, String password,String age,String sex, String image) {
+    public UserInformation(String username, String first_name, String last_name, String email, String password,String age,String sex, String image, String role) {
         this.username = username;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -28,6 +29,7 @@ public class UserInformation {
         this.age = age;
         this.sex = sex;
         this.image = image;
+        this.role = role;
     }
 
 
@@ -45,4 +47,6 @@ public class UserInformation {
     public String getPassword(){ return password; }
 
     public String getImage() { return image; }
+
+    public String getRole() { return role; }
 }

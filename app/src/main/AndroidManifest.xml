@@ -44,7 +44,10 @@
         <activity android:name=".MainTestActivity" />
         <activity android:name=".WallActivity" />
         <activity android:name=".PostActivity" />
-        <activity android:name=".CommunityActivity"></activity>
+        <activity android:name=".CommunityActivity" />
+        <activity android:name=".StudyPracticeActivity" />
+        <activity android:name=".QuizFragment" />
+        <activity android:name=".TheoryFragment"></activity>
     </application>
 
 </manifest>

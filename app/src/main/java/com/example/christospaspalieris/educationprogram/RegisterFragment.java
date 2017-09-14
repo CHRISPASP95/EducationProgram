@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -51,6 +52,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText editTextEmail,editTextPassword,editTextUserName,editTextFirstName,editTextLastName, editTextAge;
     private RadioButton male,female;
     private RadioGroup choice_sex;
+    private CheckBox teacher;
     private String sex;
     private Uri profile_pic;
 
@@ -78,6 +80,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         male = (RadioButton)view. findViewById(R.id.radiomale);
         female = (RadioButton) view.findViewById(R.id.radiofemale);
         choice_sex = (RadioGroup) view.findViewById(R.id.radiogroup);
+
+        teacher = (CheckBox) view.findViewById(R.id.teacher_cb);
 
 
         mProgress = new ProgressDialog(getActivity());
@@ -166,6 +170,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(),"Please enter your age", Toast.LENGTH_SHORT).show();
             return;
         }
+        if(!male.isChecked() && !female.isChecked())
+        {
+            Toast.makeText(getActivity(),"Please choose your gender", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         mProgress.setMessage("Registering User and\nSigning In");
         mProgress.show();
@@ -174,9 +183,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-
-                    String user_id = mAuth.getCurrentUser().getUid();
-                    DatabaseReference current_user_db = dbReference.child(user_id);
                     SaveUserInfo();
 
                     mProgress.dismiss();
@@ -185,12 +191,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     educationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(educationIntent);
 
-                   /* Toast.makeText(RegisterActivity.this,"Registerd success", Toast.LENGTH_SHORT).show();
-                    mProgress.dismiss();
-                    SaveUserInfo();
-                    Intent Login = new Intent(getApplicationContext(),LoginActivity.class);
-                    Login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(Login);*/
+
 
                 }
                 else {
@@ -214,14 +215,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String password = editTextPassword.getText().toString().trim();
         String age = editTextAge.getText().toString().trim();
         String default_image = "https://firebasestorage.googleapis.com/v0/b/my-projectsdb.appspot.com/o/Profile_images%2Fdefault_profile_icon.png?alt=media&token=58f16c42-f3c9-4f23-8e29-cbd462f4dc2d";
-
+        String role = teacher.isChecked() ? "teacher" : "student";
 
         if(male.isChecked())
-            sex = "Male";
+            sex = "male";
         if(female.isChecked())
-            sex = "Female";
+            sex = "female";
 
-        UserInformation userInformation = new UserInformation(username,firstname,lastname,email_address,password,age,sex,default_image);
+        UserInformation userInformation = new UserInformation(username,firstname,lastname,email_address,password,age,sex,default_image,role);
         FirebaseUser user = mAuth.getCurrentUser();
 
         dbReference.child(user.getUid()).setValue(userInformation);
