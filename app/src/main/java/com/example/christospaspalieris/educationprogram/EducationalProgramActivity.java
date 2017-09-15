@@ -66,8 +66,6 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_educational_program);
 
-        String[] foods = {"Δεκαδικοί", "Ρίζες", "Εξισώσεις", "Πρόσθεση", "Θεωρία της σχετικότητας","Κβαντομηχανική", "Ρευστά","Ο κόσμος μου"};
-
         final String[] titles = getResources().getStringArray(R.array.subjects);
         final TypedArray colors = getResources().obtainTypedArray(R.array.colors);
         final TypedArray images = getResources().obtainTypedArray(R.array.images);
@@ -223,9 +221,23 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem){
                 switch (menuItem.getItemId()){
+                    case(R.id.nav_home):
+                        break;
+                    case(R.id.nav_profile):
+                        Intent profileIntent = new Intent(getApplicationContext(),ProfileActivity.class);
+                        startActivity(profileIntent);
+                        break;
                     case(R.id.nav_forum):
                         Intent accountActivity = new Intent(getApplicationContext(), WallActivity.class);
                         startActivity(accountActivity);
+                        break;
+                    case(R.id.nav_community):
+                        Intent communityIntent = new Intent(getApplicationContext(),CommunityActivity.class);
+                        startActivity(communityIntent);
+                        break;
+                    case(R.id.nav_logout):
+                        logout();
+                        break;
                 }
                 return true;
             }
@@ -296,21 +308,8 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         {
             logout();
         }
-        else if(item.getItemId() == R.id.nav_forum)
-        {
-            Intent wallIntent = new Intent(getApplicationContext(),WallActivity.class);
-            startActivity(wallIntent);
-        }
-        else if(item.getItemId() == R.id.nav_community)
-        {
-            Intent communityIntent = new Intent(getApplicationContext(),CommunityActivity.class);
-            startActivity(communityIntent);
-        }
-        else if(item.getItemId() == R.id.profile)
-        {
-            Intent profileintent = new Intent(EducationalProgramActivity.this,ProfileActivity.class);
-            startActivity(profileintent);
-        }
+
+
         else if(mToggle.onOptionsItemSelected(item))
         {
             return true;

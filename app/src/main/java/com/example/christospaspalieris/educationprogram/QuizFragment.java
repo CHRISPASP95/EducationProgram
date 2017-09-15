@@ -73,6 +73,9 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         answer4 = (Button) view.findViewById(R.id.answer4);
         answer4.setOnClickListener(this);
 
+        score = (TextView) view.findViewById(R.id.score);
+        question = (TextView) view.findViewById(R.id.question);
+
         countDownTimer = new CountDownTimer(10*TIMER_LENGTH*100,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -161,6 +164,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 answer2.setVisibility(View.VISIBLE);
                 answer3.setVisibility(View.VISIBLE);
                 answer4.setVisibility(View.VISIBLE);
+                score.setText("Score " + mScore);
+                LoadNextQuestion();
 
             }
         });
@@ -170,15 +175,13 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
 
 
-        score = (TextView) view.findViewById(R.id.score);
-        question = (TextView) view.findViewById(R.id.question);
+
         //timer = (TextView) findViewById(R.id.time);
 
 
 
 
-        score.setText("Score " + mScore);
-        LoadNextQuestion();
+
 
 
         return view;
@@ -319,6 +322,9 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
     public void GameOver(){
         isPaused = true;
+
+        mTimerView.stop();
+        countDownTimer.cancel();
 
         db_scores.child(subject).child(user).child("Score").setValue(mScore);
         db_scores.child(subject).child(user).child("Time").setValue(user_time);
