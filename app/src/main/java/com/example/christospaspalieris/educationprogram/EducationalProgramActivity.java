@@ -108,9 +108,9 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
 
-                Intent theoryIntent = new Intent(getApplicationContext(),TheoryActivity.class);
-                theoryIntent.putExtra("Subject",item.getTitle());
-                startActivity(theoryIntent);
+                Intent studypractiseIntent = new Intent(getApplicationContext(),StudyPracticeActivity.class);
+                studypractiseIntent.putExtra("subject",item.getTitle());
+                startActivity(studypractiseIntent);
 
             }
 
@@ -272,9 +272,6 @@ public class EducationalProgramActivity extends AppCompatActivity  {
 //
 //            }
 //        });
-
-        Intent communityIntent = new Intent(getApplicationContext(),CommunityActivity.class);
-        startActivity(communityIntent);
 
     }
 

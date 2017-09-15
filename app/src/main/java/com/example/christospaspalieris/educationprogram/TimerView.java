@@ -111,7 +111,7 @@ public class TimerView extends View {
     public void start(int secs) {
         //stop();
 
-        mTimerAnimator = ValueAnimator.ofFloat(0.5f, 0f);
+        mTimerAnimator = ValueAnimator.ofFloat(1f, 0f);
 
         mTimerAnimator.setDuration(TimeUnit.SECONDS.toMillis(secs));
         mTimerAnimator.setInterpolator(new LinearInterpolator());

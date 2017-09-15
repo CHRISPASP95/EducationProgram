@@ -39,7 +39,6 @@ public class TheoryActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseNotes;
     private DatabaseReference mDatabaseTheory;
 
-    ImageView iv;
     ConstraintLayout cl;
     LinearLayout ll;
     TextView theoryTitle;
@@ -47,7 +46,6 @@ public class TheoryActivity extends AppCompatActivity {
     int counter;
     LayoutInflater inflator;
 
-    String item = "Δεκαδικοί";
     String subject;
 
 
@@ -62,8 +60,8 @@ public class TheoryActivity extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-        mDatabaseNotes = FirebaseDatabase.getInstance().getReference().child("Theory").child(item).child("Notes");
-        mDatabaseTheory = FirebaseDatabase.getInstance().getReference().child("Theory").child(subject);
+        //mDatabaseNotes = FirebaseDatabase.getInstance().getReference().child("Theory").child(subject).child("Notes");
+        mDatabaseTheory = FirebaseDatabase.getInstance().getReference("Theory").child(subject);
 
         theoryTitle = (TextView) findViewById(R.id.theoryTitle);
         theoryTitle.setText(subject);
@@ -90,8 +88,6 @@ public class TheoryActivity extends AppCompatActivity {
         //cl = (ConstraintLayout) findViewById(R.id.constraint_layout);
        // ll = (LinearLayout) findViewById(R.id.my_linear_layout);
 
-        iv = new ImageView(this);
-        iv.setBackgroundResource(R.drawable.calculator);
 
         //theory.setText(getResources().getString(R.string.decimals));
 //        mDatabaseNotes.addValueEventListener(new ValueEventListener() {
