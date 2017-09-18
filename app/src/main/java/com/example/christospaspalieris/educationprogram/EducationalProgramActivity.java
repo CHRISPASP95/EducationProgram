@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,25 +47,96 @@ import com.igalata.bubblepicker.rendering.BubblePicker;
 
 import org.jetbrains.annotations.NotNull;
 
+import br.com.bloder.magic.view.MagicButton;
+
 public class EducationalProgramActivity extends AppCompatActivity  {
 
     private static final String TAG = "EducationalProgram";
     private Toolbar toolbar;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference dbReference;
+    private DatabaseReference mdbReference;
+    private FirebaseUser user;
+    private UserInformation userInformation;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private RelativeLayout myLayout;
     private PopupMenu popupMenu;
-    private String item;
+    private String role;
 
-    BubblePicker picker;
+    private BubblePicker picker;
+    private MagicButton btnQuizTeacher;
+    private MagicButton btnQuizStudent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_educational_program);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser() == null)
+                {
+                    Intent logregIntentt = new Intent(getApplicationContext(),LoginRegisterActivity.class);
+                    logregIntentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(logregIntentt);
+                }
+            }
+        };
+        user = mAuth.getCurrentUser();
+
+        mdbReference = FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
+
+        btnQuizTeacher = (MagicButton) findViewById(R.id.btnQuizTeacher);
+        btnQuizStudent = (MagicButton) findViewById(R.id.btnQuizStudent);
+
+        mdbReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userInformation = dataSnapshot.getValue(UserInformation.class);
+                role = userInformation.getRole();
+                if(role.equals("student"))
+                    btnQuizStudent.setVisibility(View.VISIBLE);
+                else if(role.equals("teacher"))
+                    btnQuizTeacher.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+        btnQuizTeacher.setMagicButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent createquizIntent = new Intent(EducationalProgramActivity.this, CreateQuizActivity.class);
+                startActivity(createquizIntent);
+
+
+            }
+        });
+
+        btnQuizStudent.setMagicButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent quizIntent = new Intent(EducationalProgramActivity.this, QuizListActivity.class);
+                startActivity(quizIntent);
+
+
+            }
+        });
 
         final String[] titles = getResources().getStringArray(R.array.subjects);
         final TypedArray colors = getResources().obtainTypedArray(R.array.colors);
@@ -73,7 +145,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         picker = (BubblePicker)findViewById(R.id.picker);
 
         picker.setCenterImmediately(true);
-        picker.setBubbleSize(20);
+        picker.setBubbleSize(50);
 
         picker.setAdapter(new BubblePickerAdapter() {
             @Override
@@ -106,8 +178,11 @@ public class EducationalProgramActivity extends AppCompatActivity  {
             @Override
             public void onBubbleSelected(@NotNull PickerItem item) {
 
-                Intent studypractiseIntent = new Intent(getApplicationContext(),StudyPracticeActivity.class);
-                studypractiseIntent.putExtra("subject",item.getTitle());
+                Intent studypractiseIntent = new Intent(EducationalProgramActivity.this,StudyPracticeActivity.class);
+                Bundle extras = new Bundle();
+                extras.putString("subject",item.getTitle());
+                extras.putString("role",role);
+                studypractiseIntent.putExtras(extras);
                 startActivity(studypractiseIntent);
 
             }
@@ -249,18 +324,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
 
 
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null)
-                {
-                    Intent logregIntentt = new Intent(getApplicationContext(),LoginRegisterActivity.class);
-                    logregIntentt.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(logregIntentt);
-                }
-            }
-        };
+
 
 //        dbReference = FirebaseDatabase.getInstance().getReference("USERS").child(mAuth.getCurrentUser().getUid());
 //        dbReference.addValueEventListener(new ValueEventListener() {

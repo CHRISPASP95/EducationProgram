@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 public class StudyPracticeActivity extends AppCompatActivity {
 
@@ -17,8 +16,10 @@ public class StudyPracticeActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private Fragment TheoryFragment;
     private Fragment QuizFragment;
+    private Fragment CreateQuizFragment;
 
     String subject;
+    String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +29,18 @@ public class StudyPracticeActivity extends AppCompatActivity {
 
         TheoryFragment = new TheoryFragment();
         QuizFragment =  new QuizFragment();
+        CreateQuizFragment = new GradesFragment();
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             subject = extras.getString("subject");
-            //The key argument here must match that used in the other activity
+            role = extras.getString("role");
         }
 
         Bundle bundle = new Bundle();
         bundle.putString("subject", subject);
+        bundle.putString("role", role);
         TheoryFragment.setArguments(bundle);
         QuizFragment.setArguments(bundle);
 
@@ -54,7 +58,10 @@ public class StudyPracticeActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(TheoryFragment, "Theory");
-        adapter.addFragment(QuizFragment, "Quiz");
+        if(role.equals("student"))
+            adapter.addFragment(QuizFragment, "Quiz");
+        else if(role.equals("teacher"))
+            adapter.addFragment(CreateQuizFragment,"Grades");
         viewPager.setAdapter(adapter);
 
     }

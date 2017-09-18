@@ -36,6 +36,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     private String mAnswer;
     private int mScore = 0;
     private int key = 1;
+    private int maxKey = 10000;
     private MediaPlayer correct_sound;
     private CountDownTimer countDownTimer;
     private String user;
@@ -51,18 +52,40 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     private TimerView mTimerView;
 
     String subject;
+    String distinct_key;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quiz_fragment,container,false);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            subject = bundle.getString("subject", "Default");
-        }
+        current_user = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        current_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
+                user = userInformation.getUsername();
 
-        db_questions = FirebaseDatabase.getInstance().getReference("Questions");
-        db_scores = FirebaseDatabase.getInstance().getReference("Scores");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        Bundle bundle = this.getArguments();
+        if(getActivity() instanceof StudyPracticeActivity)
+        {
+            subject = bundle.getString("subject", "Default");
+            db_questions = FirebaseDatabase.getInstance().getReference("Questions").child(subject);
+            db_scores = FirebaseDatabase.getInstance().getReference("Scores").child(subject);
+        }
+        else if(getActivity() instanceof QuizActivity)
+        {
+            distinct_key = bundle.getString("key", "Default");
+            db_questions = FirebaseDatabase.getInstance().getReference("Tests").child(distinct_key).child("Test_Questions");
+            db_scores = FirebaseDatabase.getInstance().getReference("Scores").child(distinct_key);
+        }
 
         answer1 = (Button) view.findViewById(R.id.answer1);
         answer1.setOnClickListener(this);
@@ -94,19 +117,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         };
 
 
-        current_user = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        current_user.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserInformation userInformation = dataSnapshot.getValue(UserInformation.class);
-                    user = userInformation.getUsername();
 
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         plus2 = (TextView)view.findViewById(R.id.plus2textView);
         plus2_animator = ValueAnimator.ofFloat(startSize, endSize);
         plus2_animator.setDuration(animationDuration);
@@ -198,6 +209,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     score.setText("Score " + mScore);
                     plus2_animator.start();
                     mTimerView.right_answer = true;
+                    key++;
                     //correct_sound.start();
                     LoadNextQuestion();
                 }
@@ -210,6 +222,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     mScore++;
                     score.setText("Score " + mScore);
                     plus2_animator.start();
+                    key++;
                     //correct_sound.start();
                     LoadNextQuestion();
                 }
@@ -222,6 +235,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     mScore++;
                     score.setText("Score " + mScore);
                     plus2_animator.start();
+                    key++;
                     //correct_sound.start();
                     LoadNextQuestion();
                 }
@@ -234,6 +248,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     mScore++;
                     score.setText("Score " + mScore);
                     plus2_animator.start();
+                    key++;
                     //correct_sound.start();
                     LoadNextQuestion();
                 }
@@ -248,16 +263,35 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
     private void LoadNextQuestion() {
 
-        if(key == 11)
+        if(key == maxKey + 1)
             Success();
         else
         {
 
             Log.d(TAG,String.valueOf(key));
-            db_questions.addValueEventListener(new ValueEventListener() {
+            db_questions.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    questions_obj = dataSnapshot.child(subject).child(String.valueOf(key)).getValue(Questions.class);
+                    maxKey = (int)dataSnapshot.getChildrenCount();
+                    questions_obj = dataSnapshot.child(String.valueOf(key)).getValue(Questions.class);
+                    Log.d(TAG,questions_obj.getQuestionText());
+                    question.setText(questions_obj.getQuestionText());
+                    answer1.setText(questions_obj.getChoiceA());
+                    answer2.setText(questions_obj.getChoiceB());
+                    answer3.setText(questions_obj.getChoiceC());
+                    answer4.setText(questions_obj.getChoiceD());
+                    mAnswer = questions_obj.getCorrectAnswer();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            /*db_questions.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    questions_obj = dataSnapshot.child(String.valueOf(key)).getValue(Questions.class);
                     Log.d(TAG,questions_obj.getQuestionText());
                     question.setText(questions_obj.getQuestionText());
                     answer1.setText(questions_obj.getChoiceA());
@@ -270,8 +304,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
-            });
-            key++;
+            });*/
+
         }
 
 
@@ -282,6 +316,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
     private void Success() {
         isPaused = true;
+        mTimerView.stop();
+        countDownTimer.cancel();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder
                 .setMessage("Congratulations!!! "+ user + " You've made it with score " + mScore + " points")
@@ -289,8 +325,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 .setPositiveButton("Save my score", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        db_scores.child(subject).child(user).child("Score").setValue(mScore);
-                        db_scores.child(subject).child(user).child("Time").setValue(user_time);
+                        db_scores.child(user).child("Score").setValue(mScore);
+                        db_scores.child(user).child("Time").setValue(user_time);
                     }
                 })
                 .setNegativeButton("Go back to solve more", new DialogInterface.OnClickListener() {
@@ -326,8 +362,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         mTimerView.stop();
         countDownTimer.cancel();
 
-        db_scores.child(subject).child(user).child("Score").setValue(mScore);
-        db_scores.child(subject).child(user).child("Time").setValue(user_time);
+        db_scores.child(user).child("Score").setValue(mScore);
+        db_scores.child(user).child("Time").setValue(user_time);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder

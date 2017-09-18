@@ -17,12 +17,47 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar"/>
 
+        <br.com.bloder.magic.view.MagicButton
+            android:id="@+id/btnQuizTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:button_icon="@drawable/qletter"
+            app:button_icon_height="25dp"
+            app:button_icon_width="25dp"
+            app:expandable_area_color="@color/accent_material_dark"
+            app:hide_text="Create a quiz"
+            app:hide_text_color="@android:color/black"
+            app:icon_button_color="@color/accent_material_light"
+            app:magic_button_size="50dp" />
+
+        <br.com.bloder.magic.view.MagicButton
+            android:id="@+id/btnQuizStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
+            app:button_icon="@drawable/qletter"
+            app:button_icon_height="25dp"
+            app:button_icon_width="25dp"
+            app:expandable_area_color="@color/accent_material_dark"
+            app:hide_text="New Quiz"
+            app:hide_text_color="@android:color/black"
+            app:icon_button_color="@color/accent_material_light"
+            app:magic_button_size="50dp" />
+
+
         <com.igalata.bubblepicker.rendering.BubblePicker
             android:id="@+id/picker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/app_bar"
             app:backgroundColor="@color/background_material_dark" />
+
+
 
 
     </LinearLayout>

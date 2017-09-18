@@ -23,6 +23,7 @@ public class TheoryFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference mDatabaseTheory;
 
     String subject;
+    String role;
     TextView theoryTitle;
     TextView theory;
 
@@ -32,7 +33,8 @@ public class TheoryFragment extends Fragment implements View.OnClickListener {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            subject = bundle.getString("subject", "kati");
+            subject = bundle.getString("subject", "nothing");
+            role = bundle.getString("role", "nothing");
         }
 
         mDatabaseTheory = FirebaseDatabase.getInstance().getReference("Theory").child(subject);

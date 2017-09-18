@@ -118,7 +118,7 @@ public class TimerView extends View {
         mTimerAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.d(TAG,animation.getAnimatedValue().toString());
+                //Log.d(TAG,animation.getAnimatedValue().toString());
                 drawProgress((float) animation.getAnimatedValue());
             }
         });

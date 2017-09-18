@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabaseReference;
+    private DatabaseReference mdbReference;
     private StorageReference mStorageReference;
     private FirebaseUser user;
 
@@ -84,10 +84,17 @@ public class ProfileActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        progressSave =  new ProgressDialog(getApplicationContext());
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_images");
+        mdbReference = FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
+        LoadUserInfo();
+
+
+        progressSave =  new ProgressDialog(ProfileActivity.this);
 
         Typeface typeFace= Typeface.createFromAsset(getAssets(),"fonts/ComicBook.otf");
 
@@ -141,11 +148,8 @@ public class ProfileActivity extends AppCompatActivity  {
         });
 
 
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_images");
 
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
-        LoadUserInfo();
 
         editprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,32 +197,31 @@ public class ProfileActivity extends AppCompatActivity  {
         saveprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //progressSave.setMessage("Saving");
-                //progressSave.show();
+                progressSave.setMessage("Saving");
+                progressSave.show();
                 if(imageUri!=null) {
-                    mStorageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    mStorageReference.child(user.getUid()).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             @SuppressWarnings("VisibleForTests") String imageUri = taskSnapshot.getDownloadUrl().toString();
-                            mDatabaseReference.child("image").setValue(imageUri);
-                            //progressSave.dismiss();
+                            mdbReference.child("image").setValue(imageUri);
                         }
                     });
                 }
 
                 if(!TextUtils.isEmpty(firstname.getText().toString()))
                 {
-                    mDatabaseReference.child("first_name").setValue(firstname.getText().toString());
+                    mdbReference.child("first_name").setValue(firstname.getText().toString());
                     Log.d(TAG,"Changed first name");
                 }
                 if(!TextUtils.isEmpty(lastname.getText().toString()))
                 {
-                    mDatabaseReference.child("last_name").setValue(lastname.getText().toString());
+                    mdbReference.child("last_name").setValue(lastname.getText().toString());
                     Log.d(TAG,"Changed last name");
                 }
                 if(!TextUtils.isEmpty(age.getText().toString()))
                 {
-                    mDatabaseReference.child("age").setValue(age.getText().toString());
+                    mdbReference.child("age").setValue(age.getText().toString());
                     Log.d(TAG,"Changed age");
                 }
 
@@ -245,7 +248,7 @@ public class ProfileActivity extends AppCompatActivity  {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if (task.isSuccessful()) {
-                                                        mDatabaseReference.child("password").setValue(String.valueOf(newpass.getText()));
+                                                        mdbReference.child("password").setValue(String.valueOf(newpass.getText()));
                                                         Toast.makeText(ProfileActivity.this,"Your password was successfully changed", Toast.LENGTH_SHORT).show();
                                                         Log.d(TAG,"Changed password");
                                                     } else {
@@ -266,7 +269,7 @@ public class ProfileActivity extends AppCompatActivity  {
                 }
                 LoadUserInfo();
 
-                //progressSave.dismiss();
+                progressSave.dismiss();
             }
         });
 
@@ -296,7 +299,6 @@ public class ProfileActivity extends AppCompatActivity  {
                                     startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
                                 }
                             }
-                            Toast.makeText(ProfileActivity.this, "You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                             return true;
                         }
                     });
@@ -313,12 +315,12 @@ public class ProfileActivity extends AppCompatActivity  {
 
     void LoadUserInfo()
     {
-        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mdbReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 userInformation = dataSnapshot.getValue(UserInformation.class);
-                Picasso.with(getApplicationContext()).load(userInformation.getImage()).fit().into(profilephoto);
+                Picasso.with(ProfileActivity.this).load(userInformation.getImage()).fit().into(profilephoto);
                 firstName.setText(userInformation.getFirstName());
                 lastName.setText(userInformation.getLastName());
                 Age.setText(userInformation.getAge());
@@ -339,17 +341,19 @@ public class ProfileActivity extends AppCompatActivity  {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG,"Is paused");
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-
         if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK)
         {
 
-            Picasso.with(getApplicationContext()).load(data.getData()).fit().into(profilephoto);
+            Picasso.with(ProfileActivity.this).load(data.getData()).fit().into(profilephoto);
             imageUri = data.getData();
 
         }

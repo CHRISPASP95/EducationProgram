@@ -6,15 +6,15 @@ package com.example.christospaspalieris.educationprogram;
 
 public class UserInformation {
 
-    public String username;
-    public String first_name;
-    public String last_name;
-    public String email;
-    public String password;
-    public String age;
-    public String sex;
-    public String image;
-    public String role;
+    private String username;
+    private String first_name;
+    private String last_name;
+    private String email;
+    private String password;
+    private String age;
+    private String sex;
+    private String image;
+    private String role;
 
     public UserInformation(){
 
