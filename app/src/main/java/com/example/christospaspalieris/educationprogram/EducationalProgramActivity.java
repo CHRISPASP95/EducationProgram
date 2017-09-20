@@ -276,6 +276,7 @@ public class EducationalProgramActivity extends AppCompatActivity  {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
         {
+
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 picker.setVisibility(View.VISIBLE);
