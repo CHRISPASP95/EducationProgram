@@ -7,6 +7,7 @@
     tools:context="com.example.christospaspalieris.educationprogram.TheoryActivity"
     android:id="@+id/relative_layout">
 
+
     <ScrollView
         android:layout_width="368dp"
         android:layout_height="551dp"

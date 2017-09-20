@@ -280,8 +280,10 @@ public class EducationalProgramActivity extends AppCompatActivity  {
                 super.onDrawerClosed(view);
                 picker.setVisibility(View.VISIBLE);
             }
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
                 picker.setVisibility(View.INVISIBLE);
             }
         };

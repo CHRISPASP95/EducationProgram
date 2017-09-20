@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="color2">#f7d358</color>
     <color name="secondary_text_material_light">#8affffff</color>
-    <color name="color3">#ffffff</color>
+    <color name="foreground_material_light">#ffffff</color>
     <color name="red_color">#ed2a58</color>
     <color name="timer_circle">#2ebfca</color>
     <color name="light_gray">#a2a3a5</color>

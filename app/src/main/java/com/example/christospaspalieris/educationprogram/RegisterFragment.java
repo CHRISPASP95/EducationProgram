@@ -45,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
  * Created by User on 2/28/2017.
  */
 
-public class RegisterFragment extends Fragment implements View.OnClickListener {
+public class RegisterFragment extends Fragment {
     private static final String TAG = "RegisterFragment";
 
     private Button buttonRegister;
@@ -86,12 +86,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
 
         mProgress = new ProgressDialog(getActivity());
 
-        buttonRegister.setOnClickListener(this);
+
 
         mAuth = FirebaseAuth.getInstance();
 
 
-        dbReference = FirebaseDatabase.getInstance().getReference().child("USERS");
+        dbReference = FirebaseDatabase.getInstance().getReference("USERS");
         mStorageImage = FirebaseStorage.getInstance().getReference("Profile_images");
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -103,39 +103,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view==buttonRegister){
-            registerUser();
-
-        }
-
-
-        int checkRadioButton = choice_sex.getCheckedRadioButtonId();
-
-        switch (checkRadioButton){
-            case R.id.radiomale:
-                if(male.isChecked()){
-                    sex = "Male";
-                }
-                break;
-            case R.id.radiofemale:
-                if(female.isChecked()){
-                    sex = "Female";
-                }
-                break;
-        }
-
-
-    }
-
-
+/*
     public Uri getImageUri(Context inContext, Bitmap photo) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), photo, "Title", null);
         return Uri.parse(path);
     }
+    */
     private void registerUser() {
 
         String username = editTextUserName.getText().toString().trim();

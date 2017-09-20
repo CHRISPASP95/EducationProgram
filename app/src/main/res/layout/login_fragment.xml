@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.christospaspalieris.educationprogram.LoginFragment">
+    tools:context="com.example.christospaspalieris.educationprogram.LoginFragment"
+   android:background="@drawable/register_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,34 +14,44 @@
         android:orientation="vertical"
         android:weightSum="1"
         android:id="@+id/linearLayout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentTop="true">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="casual"
             android:text="Login to your account"
+            android:background="@android:color/transparent"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="50dp"
+            />
 
         <EditText
             android:id="@+id/EmailAddress"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:hint="Enter your email"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="70dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:drawablePadding="12dp"
+            android:drawableLeft="@drawable/ic_email_white_24dp"/>
 
         <EditText
             android:id="@+id/TextPassword"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
             android:hint="Enter your password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:drawablePadding="12dp"
+            android:drawableLeft="@drawable/ic_lock_white_24dp"/>
 
         <Button
             android:id="@+id/buttonSiginIn"
@@ -49,30 +60,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:onClick="onClick"
-            android:layout_marginTop="20dp"
-            android:text="Sign in" />
+            android:layout_marginTop="120dp"
+            android:text="Sign in"
+            android:background="@drawable/background_login"/>
 
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/gotobtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="84dp"
-        android:text="Button"
-        android:visibility="gone" />
 
-    <Button
-        android:id="@+id/gototheory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearLayout"
-        android:layout_marginEnd="136dp"
-        android:layout_marginTop="87dp"
-        android:text="Button" />
+
+
 
 </RelativeLayout>

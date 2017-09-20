@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_images");
         mdbReference = FirebaseDatabase.getInstance().getReference("USERS").child(user.getUid());
-        LoadUserInfo();
+       // LoadUserInfo();
 
 
         progressSave =  new ProgressDialog(ProfileActivity.this);
@@ -211,12 +211,12 @@ public class ProfileActivity extends AppCompatActivity  {
 
                 if(!TextUtils.isEmpty(firstname.getText().toString()))
                 {
-                    mdbReference.child("first_name").setValue(firstname.getText().toString());
+                    mdbReference.child("firstName").setValue(firstname.getText().toString());
                     Log.d(TAG,"Changed first name");
                 }
                 if(!TextUtils.isEmpty(lastname.getText().toString()))
                 {
-                    mdbReference.child("last_name").setValue(lastname.getText().toString());
+                    mdbReference.child("lastName").setValue(lastname.getText().toString());
                     Log.d(TAG,"Changed last name");
                 }
                 if(!TextUtils.isEmpty(age.getText().toString()))
@@ -267,10 +267,14 @@ public class ProfileActivity extends AppCompatActivity  {
                 {
 
                 }
-                LoadUserInfo();
+
 
                 progressSave.dismiss();
+
+                recreate();
             }
+
+
         });
 
 
@@ -309,6 +313,7 @@ public class ProfileActivity extends AppCompatActivity  {
 
             }
         });
+        LoadUserInfo();
 
 
     }
@@ -327,8 +332,6 @@ public class ProfileActivity extends AppCompatActivity  {
                 firstname.setHint(userInformation.getFirstName());
                 lastname.setHint(userInformation.getLastName());
                 age.setHint(userInformation.getAge());
-
-
 
 
             }
@@ -352,10 +355,8 @@ public class ProfileActivity extends AppCompatActivity  {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK)
         {
-
             Picasso.with(ProfileActivity.this).load(data.getData()).fit().into(profilephoto);
             imageUri = data.getData();
-
         }
 
     }
