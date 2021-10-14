@@ -24,7 +24,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
     private int question_key = 1;
     Typeface typeface;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
