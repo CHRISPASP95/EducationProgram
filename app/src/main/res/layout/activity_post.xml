@@ -4,59 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.christospaspalieris.educationprogram.PostActivity">
+    tools:context="com.example.christospaspalieris.educationprogram.PostActivity"
+    android:background="@drawable/exam">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/imageSelect"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:adjustViewBounds="true"
-            android:background="?android:attr/selectableItemBackground"
-            android:elevation="0dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/add_btn"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="8dp" />
+            android:orientation="vertical">
 
+            <ImageButton
+                android:id="@+id/imageDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:elevation="0dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/add_btn"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
 
-        <EditText
-            android:id="@+id/titleField"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/input_outline"
-            android:ems="10"
-            android:hint="Post Title...."
-            android:inputType="textPersonName"
-            android:maxLines="1"
-            android:padding="15dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+            <EditText
+                android:id="@+id/titleField"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/input_outline"
+                android:ems="10"
+                android:hint="Post Title...."
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="15dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay" />
 
-        <EditText
-            android:id="@+id/descField"
-            android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/input_outline"
-            android:ems="10"
-            android:hint="Post Description..."
-            android:inputType="textCapSentences|textMultiLine"
-            android:padding="15dp" />
+            <EditText
+                android:id="@+id/descField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/input_outline"
+                android:ems="10"
+                android:hint="Post Description..."
+                android:inputType="textCapSentences|textMultiLine"
+                android:padding="15dp" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/submitBtn"

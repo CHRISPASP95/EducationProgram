@@ -16,5 +16,5 @@
         android:text="TestDemo"
         android:textAlignment="center"
         android:textSize="30sp"
-        android:visibility="visible" />
+        android:visibility="visible"/>
 </LinearLayout>

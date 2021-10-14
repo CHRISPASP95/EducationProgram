@@ -1,8 +1,10 @@
 package com.example.christospaspalieris.educationprogram;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -20,13 +22,14 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
     EditText edit_title, edit_question, edit_choiceA, edit_choiceB, edit_choiceC, edit_choiceD, edit_answer;
     Button btn_next, btn_end;
     private int question_key = 1;
-    //public static ArrayList<String> titles_tests;
+    Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quiz);
 
+        typeface =Typeface.createFromAsset(getAssets(),"fonts/Chalk.ttf");
         db_test = FirebaseDatabase.getInstance().getReference("Tests").push();
 
 
@@ -41,20 +44,41 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         btn_next = (Button) findViewById(R.id.button_next);
         btn_end = (Button) findViewById(R.id.button_confirm);
 
+        edit_title.setTypeface(typeface);
+        edit_question.setTypeface(typeface);
+        edit_choiceA.setTypeface(typeface);
+        edit_choiceB.setTypeface(typeface);
+        edit_choiceC.setTypeface(typeface);
+        edit_choiceD.setTypeface(typeface);
+        edit_answer.setTypeface(typeface);
+        btn_next.setTypeface(typeface);
+        btn_end.setTypeface(typeface);
+
+
+
     }
 
     @Override
     public void onClick(View view) {
         if (view == btn_next) {
-            LoadToFirebase();
 
-            edit_title.setEnabled(false);
-            edit_question.getText().clear();
-            edit_choiceA.getText().clear();
-            edit_choiceB.getText().clear();
-            edit_choiceC.getText().clear();
-            edit_choiceD.getText().clear();
-            edit_answer.getText().clear();
+            if(TextUtils.isEmpty(edit_title.getText()) && TextUtils.isEmpty(edit_question.getText()) && TextUtils.isEmpty(edit_choiceA.getText()) && TextUtils.isEmpty(edit_choiceB.getText()) && TextUtils.isEmpty(edit_choiceC.getText()) && TextUtils.isEmpty(edit_choiceD.getText()) && TextUtils.isEmpty(edit_answer.getText()))
+            {
+                Toast.makeText(CreateQuizActivity.this, "Input Question please", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                LoadToFirebase();
+                edit_title.setEnabled(false);
+                edit_question.getText().clear();
+                edit_choiceA.getText().clear();
+                edit_choiceB.getText().clear();
+                edit_choiceC.getText().clear();
+                edit_choiceD.getText().clear();
+                edit_answer.getText().clear();
+                btn_end.setVisibility(View.VISIBLE);
+            }
+
 
         }
         else if(view == btn_end)
@@ -80,9 +104,6 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
         String ChoiceC = edit_choiceC.getText().toString().trim();
         String ChoiceD = edit_choiceD.getText().toString().trim();
         String Answer = edit_answer.getText().toString().trim();
-
-
-
 
         if(TextUtils.isEmpty(Title)) {
             Toast.makeText(CreateQuizActivity.this, "Please enter the title of the test", Toast.LENGTH_SHORT).show();
@@ -112,6 +133,7 @@ public class CreateQuizActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(CreateQuizActivity.this, "Please enter the correct answer", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
         if(TextUtils.equals(ChoiceA,Answer) || TextUtils.equals(ChoiceB,Answer) || TextUtils.equals(ChoiceC,Answer) || TextUtils.equals(ChoiceD,Answer))
         {

@@ -35,7 +35,7 @@
 
 
             <ImageButton
-                android:id="@+id/imageSelect"
+                android:id="@+id/imageDisplay"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -98,13 +98,13 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="1"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="10dp">
 
                 <RadioGroup
                     android:id="@+id/radiogroup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+
                     android:orientation="horizontal">
 
                     <RadioButton
@@ -124,30 +124,24 @@
 
                 </RadioGroup>
 
-                <CheckBox
-                    android:id="@+id/teacher_cb"
-                    android:layout_width="112dp"
-                    android:layout_height="wrap_content"
-                    android:text="Teacher" />
-
             </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/teacher_cb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Teacher" />
 
             <Button
                 android:id="@+id/buttonRegister"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="40dp"
                 android:text="Sign Up"
-                android:background="@drawable/background_login"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:visibility="invisible">
-
-            </LinearLayout>
+                android:background="@drawable/round_button"/>
 
 
         </LinearLayout>

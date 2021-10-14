@@ -4,16 +4,15 @@
     <integer-array name="images">
         <item>@drawable/calculator</item>
         <item>@drawable/portion</item>
-        <item>@drawable/sample_1</item>
+        <item>@drawable/yellowbackgound</item>
         <item>@drawable/edu_icon</item>
-        <item>@drawable/ruler_pencil</item>
     </integer-array>
 
     <integer-array name="colors">
-        <item>@color/color2</item>
         <item>@color/red_color</item>
-        <item>@color/colorAccent</item>
-        <item>@color/colorPrimaryDark</item>
+        <item>@color/myColor5</item>
+        <item>@color/blue</item>
+        <item>@color/color3</item>
     </integer-array>
 
     <string-array name="subjects">

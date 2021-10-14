@@ -12,12 +12,9 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
-
-
-
-
-
-
+    <style name="Theme.AppCompat.NoActionBar.Custom" parent="Theme.AppCompat.NoActionBar" >
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
 
 </resources>

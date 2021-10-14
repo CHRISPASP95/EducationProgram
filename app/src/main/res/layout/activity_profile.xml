@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.christospaspalieris.educationprogram.ProfileActivity">
+    tools:context="com.example.christospaspalieris.educationprogram.ProfileActivity"
+    android:background="@drawable/profile_bg">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -41,14 +42,18 @@
                 android:fontFamily="casual"
                 android:text="Profile"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+
 
             <ImageButton
-                android:id="@+id/imageSelect"
+                android:id="@+id/imageDisplay"
                 android:layout_width="100dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/default_profile_icon"
+                android:background="@color/myColor3"/>
 
 
             <TableRow
@@ -62,7 +67,8 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:text="Edit Profile"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:background="@drawable/round_button"/>
 
                 <Button
                     android:id="@+id/cancelEdit"
@@ -71,7 +77,8 @@
                     android:layout_gravity="center"
                     android:text="Cancel Edit"
                     android:textSize="10sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:background="@drawable/round_button"/>
             </TableRow>
 
             <EditText
@@ -82,7 +89,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/input_outline"
+                android:background="@color/myColor4"
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:inputType="textPersonName"
@@ -91,7 +98,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay" />
 
             <TextView
                 android:id="@+id/TVfirstName"
@@ -103,7 +110,8 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
                 android:padding="15dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="#000000"/>
 
 
             <EditText
@@ -114,7 +122,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/input_outline"
+                android:background="@color/myColor4"
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:inputType="textPersonName"
@@ -123,7 +131,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay"/>
 
             <TextView
                 android:id="@+id/TVlastName"
@@ -135,7 +143,8 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
                 android:padding="15dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="#000000"/>
 
             <EditText
                 android:id="@+id/ETage"
@@ -145,7 +154,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/input_outline"
+                android:background="@color/myColor4"
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:inputType="textPersonName"
@@ -154,7 +163,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay"/>
 
             <TextView
                 android:id="@+id/TVage"
@@ -166,7 +175,8 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center_horizontal"
                 android:padding="15dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="#000000"/>
 
             <ToggleButton
                 android:id="@+id/changepassButton"
@@ -179,6 +189,7 @@
                 android:textAllCaps="false"
                 android:textOff="Change Password"
                 android:textOn="Cancel Change"
+                android:background="@drawable/round_button"
                 android:visibility="gone" />
 
             <EditText
@@ -189,7 +200,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/input_outline"
+                android:background="@color/myColor4"
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:hint="Enter your old password"
@@ -199,7 +210,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay"/>
 
             <EditText
                 android:id="@+id/ETnewPass"
@@ -209,7 +220,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/input_outline"
+                android:background="@color/myColor4"
                 android:ems="10"
                 android:gravity="center_horizontal"
                 android:hint="Enter your new password"
@@ -219,7 +230,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageSelect" />
+                app:layout_constraintTop_toBottomOf="@+id/imageDisplay"/>
 
             <Button
                 android:id="@+id/saveProfile"
@@ -230,7 +241,8 @@
                 android:text="Save"
                 android:textAllCaps="false"
                 android:textStyle="italic"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:background="@drawable/round_button"/>
 
 
         </LinearLayout>

@@ -60,7 +60,6 @@ public class TheoryActivity extends AppCompatActivity {
             //The key argument here must match that used in the other activity
         }
 
-        //mDatabaseNotes = FirebaseDatabase.getInstance().getReference().child("Theory").child(subject).child("Notes");
         mDatabaseTheory = FirebaseDatabase.getInstance().getReference("Theory").child(subject);
 
         theoryTitle = (TextView) findViewById(R.id.theoryTitle);
@@ -84,65 +83,6 @@ public class TheoryActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        //cl = (ConstraintLayout) findViewById(R.id.constraint_layout);
-       // ll = (LinearLayout) findViewById(R.id.my_linear_layout);
-
-
-        //theory.setText(getResources().getString(R.string.decimals));
-//        mDatabaseNotes.addValueEventListener(new ValueEventListener() {
-//
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                for (DataSnapshot postSnapshot: dataSnapshot.getChildren())
-//                {
-//                    Note note = postSnapshot.getValue(Note.class);
-//                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(200, 85);
-//                    params.leftMargin = note.getCoordinatesX();
-//                    params.topMargin = note.getCoordinatesY();
-//                    inflator = LayoutInflater.from(getBaseContext());
-//                    View item = inflator.inflate(R.layout.note_item,null);
-//                    rl.addView(item, params);
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-//        rl.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN){
-//                            Log.d(TAG,String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
-////                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(200, 85);
-////                    params.leftMargin = (int)event.getX();
-////                    params.topMargin = (int)event.getY();
-////                    inflator = LayoutInflater.from(getBaseContext());
-////                    View item = inflator.inflate(R.layout.note_item,null);
-////                   //iv.setSingleLine(false);
-////                    //iv.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
-////                    rl.addView(item, params);
-//                    DatabaseReference newnote = mDatabaseNotes.push();
-//                    newnote.child("coordinatesX").setValue((int)event.getX());
-//                    newnote.child("coordinatesY").setValue((int)event.getY());
-//
-//
-//
-//                    //((ViewGroup)iv.getParent()).removeView(iv);
-//                }
-//                return true;
-//            }
-//        });
-
-
-
 
     }
 }

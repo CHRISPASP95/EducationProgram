@@ -9,15 +9,14 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,9 +27,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class QuizFragment extends Fragment implements View.OnClickListener {
 
-    Button answer1, answer2, answer3, answer4;
+    Button answer1, answer2, answer3, answer4, start_test,btnrate;
     TextView score, question, plus2;
-    Button start_test;
+    RatingBar ratequiz;
     private DatabaseReference db_questions,db_scores,current_user;
     private Questions questions_obj;
     private String mAnswer;
@@ -57,6 +56,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quiz_fragment,container,false);
+        ratequiz = (RatingBar) view.findViewById(R.id.ratingBar);
 
         current_user = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         current_user.addValueEventListener(new ValueEventListener() {
@@ -74,18 +74,10 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
 
         Bundle bundle = this.getArguments();
-        if(getActivity() instanceof StudyPracticeActivity)
-        {
-            subject = bundle.getString("subject", "Default");
-            db_questions = FirebaseDatabase.getInstance().getReference("Questions").child(subject);
-            db_scores = FirebaseDatabase.getInstance().getReference("Scores").child(subject);
-        }
-        else if(getActivity() instanceof QuizActivity)
-        {
-            distinct_key = bundle.getString("key", "Default");
-            db_questions = FirebaseDatabase.getInstance().getReference("Tests").child(distinct_key).child("Test_Questions");
-            db_scores = FirebaseDatabase.getInstance().getReference("Scores").child(distinct_key);
-        }
+        subject = bundle.getString("subject", "Default");
+        db_questions = FirebaseDatabase.getInstance().getReference("Questions").child(subject);
+        db_scores = FirebaseDatabase.getInstance().getReference("Scores").child(subject);
+
 
         answer1 = (Button) view.findViewById(R.id.answer1);
         answer1.setOnClickListener(this);
@@ -95,6 +87,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         answer3.setOnClickListener(this);
         answer4 = (Button) view.findViewById(R.id.answer4);
         answer4.setOnClickListener(this);
+        btnrate = (Button) view.findViewById(R.id.rate_button);
+        btnrate.setOnClickListener(this);
 
         score = (TextView) view.findViewById(R.id.score);
         question = (TextView) view.findViewById(R.id.question);
@@ -105,9 +99,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 if(isPaused)
                     cancel();
                 else
-                {
                     user_time = ((11*1000) - millisUntilFinished)/1000;
-                }
+
             }
 
             @Override
@@ -163,7 +156,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
         mTimerView = (TimerView) view.findViewById(R.id.timer);
 
-        start_test = (Button) view.findViewById(R.id.start_test);
+        start_test = (Button) view.findViewById(R.id.start);
         start_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,6 +248,10 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 else
                     GameOver();
                 break;
+            case R.id.rate_button:
+                db_scores.child(user).child("User_Rate").setValue(ratequiz.getRating());
+                startActivity(new Intent(getActivity(),EducationalProgramActivity.class));
+                break;
         }
 
 
@@ -288,24 +285,6 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
                 }
             });
-            /*db_questions.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    questions_obj = dataSnapshot.child(String.valueOf(key)).getValue(Questions.class);
-                    Log.d(TAG,questions_obj.getQuestionText());
-                    question.setText(questions_obj.getQuestionText());
-                    answer1.setText(questions_obj.getChoiceA());
-                    answer2.setText(questions_obj.getChoiceB());
-                    answer3.setText(questions_obj.getChoiceC());
-                    answer4.setText(questions_obj.getChoiceD());
-                    mAnswer = questions_obj.getCorrectAnswer();
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });*/
-
         }
 
 
@@ -327,6 +306,8 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         db_scores.child(user).child("Score").setValue(mScore);
                         db_scores.child(user).child("Time").setValue(user_time);
+                        db_scores.child(user).child("User_ID").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        startActivity(new Intent(getActivity(),EducationalProgramActivity.class));
                     }
                 })
                 .setNegativeButton("Go back to solve more", new DialogInterface.OnClickListener() {
@@ -335,6 +316,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                         startActivity(new Intent(getActivity(),EducationalProgramActivity.class));
                     }
                 });
+
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -364,10 +346,11 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
         db_scores.child(user).child("Score").setValue(mScore);
         db_scores.child(user).child("Time").setValue(user_time);
+        db_scores.child(user).child("User_ID").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder
-                .setMessage("Game Over!!! Your score is " + mScore + " points. Would you like to try again?")
+                .setMessage("Game Over! Your score is " + mScore + " points. Would you like to try again?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -382,7 +365,23 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                         ClearUI();
                     }
-                });
+                })
+        .setNeutralButton("Rate Quiz", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                answer1.setVisibility(View.GONE);
+                answer2.setVisibility(View.GONE);
+                answer3.setVisibility(View.GONE);
+                answer4.setVisibility(View.GONE);
+                start_test.setVisibility(View.GONE);
+                score.setVisibility(View.GONE);
+                question.setVisibility(View.GONE);
+                plus2.setVisibility(View.GONE);
+                ratequiz.setVisibility(View.VISIBLE);
+                btnrate.setVisibility(View.VISIBLE);
+
+            }
+        });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();

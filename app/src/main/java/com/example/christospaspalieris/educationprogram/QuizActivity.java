@@ -13,14 +13,14 @@ public class QuizActivity extends AppCompatActivity {
 
 
     private String test_key;
-    private Fragment QuizFragment;
+    private Fragment TestFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        QuizFragment = new QuizFragment();
+        TestFragment = new TestFragment();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -30,10 +30,10 @@ public class QuizActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString("key", test_key);
-        QuizFragment.setArguments(bundle);
+        TestFragment.setArguments(bundle);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();// Replace the contents of the container with the new fragment
-        ft.replace(R.id.fragment_container, QuizFragment);// or ft.add(R.id.your_placeholder, new FooFragment());
+        ft.replace(R.id.fragment_container, TestFragment);// or ft.add(R.id.your_placeholder, new FooFragment());
         ft.commit();// Complete the changes added above
 
 

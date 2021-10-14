@@ -14,9 +14,7 @@ public class StudyPracticeActivity extends AppCompatActivity {
     private SectionsPageAdapter mSectionsPageAdapter;
 
     private ViewPager mViewPager;
-    private Fragment TheoryFragment;
-    private Fragment QuizFragment;
-    private Fragment CreateQuizFragment;
+    private Fragment TheoryFragment ,QuizFragment, GradesFragment;
 
     String subject;
     String role;
@@ -29,7 +27,7 @@ public class StudyPracticeActivity extends AppCompatActivity {
 
         TheoryFragment = new TheoryFragment();
         QuizFragment =  new QuizFragment();
-        CreateQuizFragment = new GradesFragment();
+        GradesFragment = new GradesFragment();
 
 
         Bundle extras = getIntent().getExtras();
@@ -43,6 +41,7 @@ public class StudyPracticeActivity extends AppCompatActivity {
         bundle.putString("role", role);
         TheoryFragment.setArguments(bundle);
         QuizFragment.setArguments(bundle);
+        GradesFragment.setArguments(bundle);
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
@@ -61,7 +60,7 @@ public class StudyPracticeActivity extends AppCompatActivity {
         if(role.equals("student"))
             adapter.addFragment(QuizFragment, "Quiz");
         else if(role.equals("teacher"))
-            adapter.addFragment(CreateQuizFragment,"Grades");
+            adapter.addFragment(GradesFragment,"Grades");
         viewPager.setAdapter(adapter);
 
     }

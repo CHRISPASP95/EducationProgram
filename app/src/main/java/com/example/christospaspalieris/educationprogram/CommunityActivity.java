@@ -1,12 +1,14 @@
 package com.example.christospaspalieris.educationprogram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ public class CommunityActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseUsers;
     private RecyclerView mFriendsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +53,12 @@ public class CommunityActivity extends AppCompatActivity {
                 viewHolder.setUsername(model.getUsername());
                 viewHolder.setOccupation(model.getRole());
                 viewHolder.setImageUri(model.getImage(),getApplicationContext());
-                viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), friend_key,
-                                Toast.LENGTH_LONG).show();
+                        Intent profileIntent = new Intent(getApplicationContext(),ProfileDisplay.class);
+                        profileIntent.putExtra("user_friend",friend_key);
+                        startActivity(profileIntent);
                     }
                 });
             }

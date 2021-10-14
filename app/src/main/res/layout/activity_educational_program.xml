@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/dark_gray">
 
         <include
             android:id="@+id/app_bar"
@@ -27,10 +28,10 @@
             app:button_icon="@drawable/qletter"
             app:button_icon_height="25dp"
             app:button_icon_width="25dp"
-            app:expandable_area_color="@color/accent_material_dark"
+            app:expandable_area_color="@color/myColor1"
             app:hide_text="Create a quiz"
             app:hide_text_color="@android:color/black"
-            app:icon_button_color="@color/accent_material_light"
+            app:icon_button_color="@color/myColor3"
             app:magic_button_size="50dp" />
 
         <br.com.bloder.magic.view.MagicButton
@@ -43,10 +44,10 @@
             app:button_icon="@drawable/qletter"
             app:button_icon_height="25dp"
             app:button_icon_width="25dp"
-            app:expandable_area_color="@color/accent_material_dark"
+            app:expandable_area_color="@color/myColor1"
             app:hide_text="New Quiz"
             app:hide_text_color="@android:color/black"
-            app:icon_button_color="@color/accent_material_light"
+            app:icon_button_color="@color/myColor3"
             app:magic_button_size="50dp" />
 
 
@@ -55,7 +56,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/app_bar"
-            app:backgroundColor="@color/background_material_dark" />
+            app:backgroundColor="@color/dark_gray" />
+
+
 
 
 

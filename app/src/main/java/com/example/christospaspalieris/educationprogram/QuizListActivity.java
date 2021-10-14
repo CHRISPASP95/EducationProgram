@@ -47,7 +47,7 @@ public class QuizListActivity extends AppCompatActivity {
 
                     Log.d("KEY",ds.getKey());
                     tests_keys.add(ds.getKey());
-                    //title = String.valueOf(ds.getValue());
+
                 }
 
             }
@@ -71,11 +71,27 @@ public class QuizListActivity extends AppCompatActivity {
 
 
 
-        FirebaseListAdapter<QuizHelper> firebaseListAdapter = new FirebaseListAdapter<QuizHelper>(QuizListActivity.this,QuizHelper.class,R.layout.quiz_layout,student_tests_keys) {
+        FirebaseListAdapter<QuizHelper> firebaseListAdapter = new FirebaseListAdapter<QuizHelper>(
+                QuizListActivity.this,
+                QuizHelper.class,
+                R.layout.quiz_layout,
+                student_tests_keys) {
             @Override
-            protected void populateView(View v, final QuizHelper model, int position) {
-                final TextView test_title = (TextView) v.findViewById(R.id.display_test_title);
-                test_title.setText(model.getTitle());
+            protected void populateView(final View v, final QuizHelper model, int position) {
+
+                student_tests_keys.child(tests_keys.get(position)).child("Test_Name").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        TextView test_title = (TextView) v.findViewById(R.id.display_test_title);
+                        test_title.setText(String.valueOf(dataSnapshot.getValue()));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         };
         testlistView.setAdapter(firebaseListAdapter);

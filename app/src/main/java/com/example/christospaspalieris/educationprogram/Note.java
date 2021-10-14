@@ -6,23 +6,30 @@ package com.example.christospaspalieris.educationprogram;
 
 public class Note {
 
-    private int coordinatesX,coordinatesY;
+    private String coordinatesX,coordinatesY,note,author;
 
     public Note()
     {
 
     }
 
-    public Note(int coordinatesX, int coordinatesY) {
+    public Note(String coordinatesX, String coordinatesY,String note,String author) {
         this.coordinatesX = coordinatesX;
         this.coordinatesY = coordinatesY;
+        this.note = note;
+        this.author = author;
     }
 
-    public int getCoordinatesX() {
+    public String getCoordinatesX() {
         return coordinatesX;
     }
 
-    public int getCoordinatesY() {
-        return coordinatesY;
+    public String getCoordinatesY() { return coordinatesY; }
+
+    public String getNote() {
+        return note;
     }
+
+    public String getAuthor() { return author; }
+
 }

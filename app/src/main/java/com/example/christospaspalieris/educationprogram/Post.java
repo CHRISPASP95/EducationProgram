@@ -6,16 +6,23 @@ package com.example.christospaspalieris.educationprogram;
 
 public class Post {
 
-    private String title,desc,poster_image,uid;
+    private String title;
+    private String desc;
+    private String poster_image;
+    private String uid;
+    private String pid;
+    private String reactions;
 
     public Post()
     {}
 
-    public Post(String title, String desc, String poster_image, String uid) {
+    public Post(String title, String desc, String poster_image, String uid, String pid, String reactions) {
         this.title = title;
         this.desc = desc;
         this.poster_image = poster_image;
         this.uid = uid;
+        this.pid = pid;
+        this.reactions = reactions;
     }
 
     public String getTitle() {
@@ -48,5 +55,21 @@ public class Post {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
+    public String getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(String reactions) {
+        this.reactions = reactions;
     }
 }

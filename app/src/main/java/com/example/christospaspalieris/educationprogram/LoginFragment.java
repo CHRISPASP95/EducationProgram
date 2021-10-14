@@ -32,7 +32,6 @@ public class LoginFragment extends Fragment  {
     private static final String TAG = "LoginFragment";
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference dbReference;
 
     EditText email,password;
@@ -94,6 +93,7 @@ public class LoginFragment extends Fragment  {
                         progressLogin.dismiss();
                     }else{
                         Toast.makeText(getActivity(),"Error while Login",Toast.LENGTH_LONG).show();
+                        progressLogin.dismiss();
                     }
                 }
             });
@@ -106,10 +106,9 @@ public class LoginFragment extends Fragment  {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(user_id)){
-                    Intent educationIntent = new Intent(getActivity(),EducationalProgramActivity.class);
+                    Intent educationIntent = new Intent(getContext(),EducationalProgramActivity.class);
                     educationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(educationIntent);
-                    // Toast.makeText(getApplicationContext(),"Hello !!!"+ user_id,Toast.LENGTH_LONG).show();
                 }else {
                     Toast.makeText(getActivity(),"You have to setup your account",Toast.LENGTH_LONG).show();
                 }

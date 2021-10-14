@@ -62,26 +62,11 @@ public class PostActivity extends AppCompatActivity {
 
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Forum");
-        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("USERS").child(mCurrentUser.getUid());
-
-        //mSelectImage = (ImageButton)findViewById(R.id.imageSelect);
-
-        mPostTitle = (EditText)findViewById(R.id.titleField);
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("USERS").child(mCurrentUser.getUid());mPostTitle = (EditText)findViewById(R.id.titleField);
         mPostDesc = (EditText)findViewById(R.id.descField);
         mSubmitBtn = (Button)findViewById(R.id.submitBtn);
 
         mProgressDialog = new ProgressDialog(this);
-
-
-
-
-
-
-        //Log.d(TAG, posterImage);
-
-
-
-
         mSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,40 +77,28 @@ public class PostActivity extends AppCompatActivity {
 
     private void startPosting() {
 
-        mProgressDialog.setMessage("Posting to Forum...");
-        mProgressDialog.show();
+
         String title_val = mPostTitle.getText().toString().trim();
         String desc_val = mPostDesc.getText().toString().trim();
 
         if(!TextUtils.isEmpty(title_val) && !TextUtils.isEmpty(desc_val))
         {
+            mProgressDialog.setMessage("Posting to Forum...");
+            mProgressDialog.show();
             DatabaseReference newPost = mDatabase.push();
             newPost.child("title").setValue(title_val);
             newPost.child("desc").setValue(desc_val);
             newPost.child("uid").setValue(mCurrentUser.getUid());
-
-            Log.d(TAG,"yolyoylyo");
-
-             //StorageReference filepath = mStorage.child("Post_Images");
-
-
-
-
-
+            newPost.child("pid").setValue(newPost.getKey());
+            mProgressDialog.dismiss();
+            Log.d(TAG, "yolyoylyo");
+            finish();
         }
-        mProgressDialog.dismiss();
+
+
 
     }
 
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK)
-//        {
-//            mImageUri = data.getData();
-//            mSelectImage.setImageURI(mImageUri);
-//        }
-//    }
+
 }
